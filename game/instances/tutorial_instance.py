@@ -2,12 +2,14 @@ import pygame
 
 from isec.instance import BaseInstance
 from isec.environment import Scene
+from game.objects.tutorial_entity import TutorialEntity
 
 
 class TutorialInstance(BaseInstance):
     def __init__(self):
         super().__init__(50)
         self.scene = Scene()
+        self.scene.add_entities(TutorialEntity())
 
     async def loop(self):
         self.event_handler.handle_events()
