@@ -96,28 +96,86 @@ class Resource:
     @classmethod
     def _load_image(cls,
                     assets_path: PathLike,
-                    current_image_dict: dict = None) -> None:
+                    current_image_dict: dict = None,
+                    current_data_dict: dict = None) -> None:
 
         if current_image_dict is None:
             current_image_dict = cls.image
             assets_path += "image/"
+
+        if current_data_dict is None:
+            if "image" not in cls.data:
+                cls.data["image"] = {}
+            current_data_dict = cls.data["image"]
 
         for elem in os.scandir(assets_path):
             if elem.is_dir():
                 if elem.name not in current_image_dict:
                     current_image_dict[elem.name] = {}
 
+                if elem.name not in current_data_dict:
+                    current_data_dict[elem.name] = {}
+
                 cls._load_image(assets_path + elem.name + "/",
-                                current_image_dict[elem.name])
+                                current_image_dict[elem.name],
+                                current_data_dict[elem.name])
+                continue
 
             if elem.is_file():
                 key_name = "".join(elem.name.split(".")[:-1])
 
-                if any(elem.name.endswith(ext) for ext in [".png", ".jpg"]):
+                if elem.name == "index.json":
+                    with open(assets_path + elem.name) as index_image:
+                        image_dict = json.load(index_image)
+
+                    # if elem.name not in current_data_dict:
+                    #     current_data_dict[elem.name] = {}
+
+                    current_data_dict |= image_dict
+
+                elif any(elem.name.endswith(ext) for ext in [".png", ".jpg"]):
                     current_image_dict[key_name] = pygame.image.load(assets_path + elem.name).convert_alpha()
 
                 else:
                     raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported image file format")
+
+    @classmethod
+    def _load_sound(cls,
+                    assets_path: PathLike,
+                    current_sound_dict: dict = None,
+                    current_data_dict: dict = None) -> None:
+
+        if current_sound_dict is None:
+            current_sound_dict = cls.sound
+            assets_path += "sound/"
+
+        if current_data_dict is None:
+            if "sound" not in cls.data:
+                cls.data["sound"] = {}
+            current_data_dict = cls.data["sound"]
+
+        for elem in os.scandir(assets_path):
+            if elem.is_dir():
+                if elem.name not in current_sound_dict:
+                    current_sound_dict[elem.name] = {}
+
+                if elem.name not in current_data_dict:
+                    current_data_dict[elem.name] = {}
+
+                cls._load_sound(assets_path + elem.name + "/",
+                                current_sound_dict[elem.name],
+                                current_data_dict[elem.name])
+                continue
+
+            if elem.is_file():
+                key_name = "".join(elem.name.split(".")[:-1])
+
+                if any(elem.name.endswith(ext) for ext in [".wav", ".mp3", ".ogg"]):
+                    current_sound_dict[key_name] = pygame.mixer.Sound(assets_path + elem.name)
+
+                else:
+                    raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
+
 
     @classmethod
     def _cache(cls,
@@ -125,6 +183,9 @@ class Resource:
                data_dict: dict = None) -> None:
 
         if not cls.data["engine"]["resource"]["surface"]["caching"]["enabled"]:
+            return
+
+        if "image" not in cls.data:
             return
 
         if surf_dict is None:
@@ -151,27 +212,3 @@ class Resource:
 
         return CachedSurface(surf, cache_size)
 
-    @classmethod
-    def _load_sound(cls,
-                    assets_path: PathLike,
-                    current_dict: dict = None) -> None:
-
-        if current_dict is None:
-            current_dict = cls.sound
-            assets_path += "sound/"
-
-        for elem in os.scandir(assets_path):
-            if elem.is_dir():
-                if elem.name not in current_dict:
-                    current_dict[elem.name] = {}
-
-                cls._load_sound(assets_path+elem.name+"/", current_dict[elem.name])
-
-            if elem.is_file():
-                key_name = "".join(elem.name.split(".")[:-1])
-
-                if any(elem.name.endswith(ext) for ext in [".wav", ".mp3", ".ogg"]):
-                    current_dict[key_name] = pygame.mixer.Sound(assets_path+elem.name)
-
-                else:
-                    raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
