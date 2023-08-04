@@ -17,6 +17,11 @@ class LoopHandler:
         return cls.stack[-1] == instance
 
     @classmethod
+    def fps_caption(cls) -> None:
+
+        pygame.display.set_caption(str(cls._clock.get_fps()))
+
+    @classmethod
     def limit_and_get_delta(cls,
                             fps: int):
 

@@ -2,7 +2,7 @@ import pygame
 
 from collections.abc import Iterable
 
-from isec.environment.position.pos import Pos
+from isec.environment.base import Pos
 
 
 class StaticPos(Pos):

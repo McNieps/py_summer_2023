@@ -3,16 +3,18 @@ import typing
 import pygame.mouse
 
 from isec.app import Resource
-from isec.environment import Entity, sprite, position, Scene
+from isec.environment import Entity, EntityScene
+from isec.environment.base import Sprite, Pos
+from isec.environment.position import SimplePos
 from isec.instance import BaseInstance
 
 
 class Button(Entity):
     def __init__(self,
                  linked_instance: BaseInstance,
-                 linked_scene: Scene,
-                 button_position: position.Pos = None,
-                 button_sprite: sprite.SimpleSprite = None,
+                 linked_scene: EntityScene,
+                 button_position: Pos = None,
+                 button_sprite: Sprite = None,
                  up_callback: typing.Callable[[], None] = None,
                  down_callback: typing.Callable[[], None] = None,
                  pressed_callback: typing.Callable[[], None] = None) -> None:
@@ -21,10 +23,11 @@ class Button(Entity):
         self.linked_scene = linked_scene
 
         if button_position is None:
-            button_position = position.SimplePos()
+            button_position = SimplePos()
         if button_sprite is None:
-            button_sprite = sprite.SimpleSprite(Resource.image["stock"]["button"],
-                                                "static")
+            button_sprite = Sprite(surface=Resource.image["stock"]["button"],
+                                   rendering_technique="static")
+
         super().__init__(button_position, button_sprite)
 
         if up_callback is None:
@@ -54,23 +57,21 @@ class Button(Entity):
         if not self._check_if_mouse_over():
             return
 
-        print("click")
         self.pressed = True
         self.down_callback()
 
     def mouse_up(self) -> None:
-        if not self._check_if_mouse_over():
+        if not self.pressed or not self._check_if_mouse_over():
             self.pressed = False
             return
 
-        print("clock")
         self.up_callback()
         self.pressed = False
 
     def mouse_pressed(self) -> None:
-        if not self._check_if_mouse_over():
+        if not self.pressed or not self._check_if_mouse_over():
             return
-        print("i")
+
         self.pressed_callback()
         return
 

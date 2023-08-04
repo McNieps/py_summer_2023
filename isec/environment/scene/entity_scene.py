@@ -1,23 +1,22 @@
 import pygame
 import pymunk
 
-from isec.environment.entity import Entity
-from isec.environment.camera import Camera
+from isec.environment.base.scene import Scene
+from isec.environment.base.entity import Entity
+from isec.environment.base.camera import Camera
 from isec.environment.position.pymunk_pos import PymunkPos
 
 
-class Scene:
+class EntityScene(Scene):
     def __init__(self,
-                 surface: pygame.Surface = None):
+                 surface: pygame.Surface = None,
+                 entities: list[Entity] = None):
 
-        self.entities: list[Entity] = []
+        super().__init__(surface)
 
-        if surface is None:
-            surface = pygame.display.get_surface()
-        self.surface = surface
-        self.rect = self.surface.get_rect()
-
-        self.camera = Camera()
+        if entities is None:
+            entities = []
+        self.entities = entities
 
         self.space = pymunk.Space()
 

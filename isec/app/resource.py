@@ -1,5 +1,6 @@
 import pygame
 import json
+import csv
 import os
 
 from isec._ise_typing import PathLike
@@ -83,6 +84,9 @@ class Resource:
 
                     current_dict[key_name] |= cls._load_json(assets_path+elem.name)
 
+                elif elem.name.endswith(".csv"):
+                    current_dict[key_name] = cls._load_csv(assets_path+elem.name)
+
                 else:
                     raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
 
@@ -92,6 +96,13 @@ class Resource:
 
         with open(file_path) as file:
             return json.load(file)
+
+    @classmethod
+    def _load_csv(cls,
+                    file_path: PathLike) -> list[list[int]]:
+
+        with open(file_path) as file:
+            return [list(map(int, rec)) for rec in csv.reader(file, delimiter=',')]
 
     @classmethod
     def _load_image(cls,
@@ -127,9 +138,6 @@ class Resource:
                 if elem.name == "index.json":
                     with open(assets_path + elem.name) as index_image:
                         image_dict = json.load(index_image)
-
-                    # if elem.name not in current_data_dict:
-                    #     current_data_dict[elem.name] = {}
 
                     current_data_dict |= image_dict
 
@@ -176,7 +184,6 @@ class Resource:
                 else:
                     raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
 
-
     @classmethod
     def _cache(cls,
                surf_dict: dict = None,
@@ -211,4 +218,3 @@ class Resource:
             cache_size = cls.data["engine"]["resource"]["surface"]["caching"]["default_size"]
 
         return CachedSurface(surf, cache_size)
-

@@ -2,7 +2,7 @@ import pygame
 
 from collections.abc import Iterable
 
-from isec.environment.position import StaticPos
+from isec.environment.base.pos import Pos
 
 
 class Camera:
@@ -10,12 +10,12 @@ class Camera:
                  position: Iterable = None) -> None:
 
         if position is None:
-            self.position = StaticPos()
+            self.position = Pos()
         else:
-            self.position = StaticPos(*position)
+            self.position = Pos(*position)
 
     def get_offset(self,
-                   position: StaticPos) -> pygame.math.Vector2:
+                   position: Pos) -> pygame.math.Vector2:
 
         return position.position - self.position.position
 

@@ -43,3 +43,7 @@ class BaseInstance:
             await asyncio.sleep(0)
 
         await self.finish()
+
+    @property
+    def delta(self):
+        return LoopHandler.delta

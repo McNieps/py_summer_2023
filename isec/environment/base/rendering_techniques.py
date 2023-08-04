@@ -1,9 +1,12 @@
 import pygame
+import typing
 
 from collections.abc import Iterable
 
 
 class RenderingTechniques:
+    TYPING = typing.Literal["static", "rotated", "cached"]
+
     @staticmethod
     def static(self,
                destination: pygame.Surface,
@@ -17,7 +20,7 @@ class RenderingTechniques:
         if not self.effective_rect.colliderect(destination_rect):
             return
 
-        destination.blit(self.surface, self.effective_rect)
+        destination.blit(self.surface, self.effective_rect, special_flags=self.blit_flag)
 
     @staticmethod
     def rotated(self,
@@ -33,7 +36,7 @@ class RenderingTechniques:
         if not self.effective_rect.colliderect(destination_rect):
             return
 
-        destination.blit(self.effective_surf, self.effective_rect)
+        destination.blit(self.effective_surf, self.effective_rect, special_flags=self.blit_flag)
 
     @staticmethod
     def cached(self,
@@ -49,4 +52,4 @@ class RenderingTechniques:
         if not self.effective_rect.colliderect(destination_rect):
             return
 
-        destination.blit(self.effective_surf, self.effective_rect)
+        destination.blit(self.effective_surf, self.effective_rect, special_flags=self.blit_flag)

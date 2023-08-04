@@ -1,6 +1,4 @@
-from isec.environment.entity import Entity
-from isec.environment.scene import Scene
-from isec.environment.camera import Camera
-from isec.environment import position
+from isec.environment.scene import EntityScene, TilemapScene
+from isec.environment.base import Entity, Sprite, Pos
 
-__all__ = [Entity, Scene, Camera, position]
+__all__ = [EntityScene, TilemapScene, Entity, Sprite, Pos]

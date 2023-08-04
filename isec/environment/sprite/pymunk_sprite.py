@@ -1,15 +1,15 @@
 import pygame
 import pymunk
-import typing
 
-from isec.environment.sprite.simple_sprite import SimpleSprite
+from isec.environment.base import Sprite, RenderingTechniques
 from isec.environment.position.pymunk_pos import PymunkPos
 
 
-class PymunkSprite(SimpleSprite):
+class PymunkSprite(Sprite):
     def __init__(self,
                  pymunk_pos: PymunkPos,
-                 rendering_technique: typing.Literal["static", "rotated", "cached"]) -> None:
+                 rendering_technique: RenderingTechniques.TYPING = "static",
+                 blit_flag: int = 0,) -> None:
 
         if len(pymunk_pos.shapes) == 0:
             raise ValueError("PymunkPos must have at least one shape")
@@ -41,5 +41,6 @@ class PymunkSprite(SimpleSprite):
 
         #
 
-        super().__init__(surface,
-                         rendering_technique)
+        super().__init__(surface=surface,
+                         rendering_technique=rendering_technique,
+                         blit_flag=blit_flag)
