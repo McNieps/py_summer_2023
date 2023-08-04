@@ -15,9 +15,9 @@ class Button(Entity):
                  linked_scene: EntityScene,
                  button_position: Pos = None,
                  button_sprite: Sprite = None,
-                 up_callback: typing.Callable[[], None] = None,
-                 down_callback: typing.Callable[[], None] = None,
-                 pressed_callback: typing.Callable[[], None] = None) -> None:
+                 up_callback: typing.Callable[[], typing.Coroutine] = None,
+                 down_callback: typing.Callable[[], typing.Coroutine] = None,
+                 pressed_callback: typing.Callable[[], typing.Coroutine] = None) -> None:
 
         self.linked_instance = linked_instance
         self.linked_scene = linked_scene
@@ -53,28 +53,27 @@ class Button(Entity):
 
         return sprite_effective_rect.collidepoint(mouse_pos_in_scene)
 
-    def mouse_down(self) -> None:
+    async def mouse_down(self) -> None:
         if not self._check_if_mouse_over():
             return
 
         self.pressed = True
-        self.down_callback()
+        await self.down_callback()
 
-    def mouse_up(self) -> None:
+    async def mouse_up(self) -> None:
         if not self.pressed or not self._check_if_mouse_over():
             self.pressed = False
             return
 
-        self.up_callback()
+        await self.up_callback()
         self.pressed = False
 
-    def mouse_pressed(self) -> None:
+    async def mouse_pressed(self) -> None:
         if not self.pressed or not self._check_if_mouse_over():
             return
 
-        self.pressed_callback()
+        await self.pressed_callback()
         return
 
-    def _empty_callback(self):
+    async def _empty_callback(self):
         return
-

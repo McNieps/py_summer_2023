@@ -2,7 +2,6 @@ import pygame
 import numpy
 import math
 
-from isec.app import Resource
 from isec.environment.base.scene import Scene, Camera
 
 
@@ -69,6 +68,35 @@ class TilemapScene(Scene):
         """
 
         return
+
+    @classmethod
+    def create_tileset(cls,
+                       tileset_surface: pygame.Surface,
+                       tile_size: int,
+                       tile_margin: int = 0,
+                       tile_spacing: int = 0) -> dict[int, pygame.Surface | None]:
+
+        tileset = {cls.EMPTY_TILE: None}
+        tileset_width, tileset_height = tileset_surface.get_size()
+
+        if (tileset_surface.get_width()-tile_margin+tile_spacing) % (tile_size + tile_spacing) != 0:
+            raise ValueError("Invalid tileset width")
+
+        if (tileset_surface.get_height()-tile_margin+tile_spacing) % (tile_size + tile_spacing) != 0:
+            raise ValueError("Invalid tileset height")
+
+        nb_columns = (tileset_width-tile_margin+tile_spacing) // (tile_size + tile_spacing)
+        nb_rows = (tileset_height-tile_margin+tile_spacing) // (tile_size + tile_spacing)
+
+        for i in range(nb_rows):
+            for j in range(nb_columns):
+                tileset[i*nb_columns+j] = tileset_surface.subsurface(
+                    pygame.Rect(tile_margin + j*(tile_size + tile_spacing),
+                                tile_margin + i*(tile_size + tile_spacing),
+                                tile_size,
+                                tile_size))
+
+        return tileset
 
     def update(self, delta):
         pass

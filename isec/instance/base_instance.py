@@ -19,10 +19,10 @@ class BaseInstance:
         self.event_handler.register_quit_callback(LoopHandler.stop_game)
         self.fps = fps
 
-    def _preloop(self):
+    async def _preloop(self):
         pygame.display.flip()
         LoopHandler.limit_and_get_delta(self.fps)
-        self.event_handler.handle_events()
+        await self.event_handler.handle_events()
 
     async def setup(self):
         return
@@ -38,7 +38,7 @@ class BaseInstance:
         LoopHandler.stack.append(self)
 
         while LoopHandler.is_running(self):
-            self._preloop()
+            await self._preloop()
             await self.loop()
             await asyncio.sleep(0)
 

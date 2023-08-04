@@ -4,6 +4,8 @@ from isec.instance import BaseInstance, LoopHandler
 from isec.environment import EntityScene, Pos
 from isec.environment.sprite import AnimatedSprite
 
+from game.instances.world import World
+
 
 _height_offset = -30
 _width_offset = 10
@@ -21,18 +23,19 @@ class PlayButton(Button):
 
         self.hovered = False
 
-        def down_callback() -> None:
+        async def down_callback() -> None:
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
 
-        def pressed_callback() -> None:
+        async def pressed_callback() -> None:
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
 
-        def up_callback() -> None:
-            print("Play")
+        async def up_callback() -> None:
+            x = World()
+            await x.execute()
 
         super().__init__(linked_instance,
                          linked_scene,
@@ -64,17 +67,17 @@ class OptionButton(Button):
 
         self.hovered = False
 
-        def down_callback() -> None:
+        async def down_callback() -> None:
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
 
-        def pressed_callback() -> None:
+        async def pressed_callback() -> None:
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
 
-        def up_callback() -> None:
+        async def up_callback() -> None:
             print("Settings")
 
         super().__init__(linked_instance,
@@ -107,17 +110,17 @@ class QuitButton(Button):
 
         self.hovered = False
 
-        def down_callback() -> None:
+        async def down_callback() -> None:
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
 
-        def pressed_callback() -> None:
+        async def pressed_callback() -> None:
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
 
-        def up_callback() -> None:
+        async def up_callback() -> None:
             LoopHandler.stop_game()
 
         super().__init__(linked_instance,

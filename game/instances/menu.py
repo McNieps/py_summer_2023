@@ -7,6 +7,7 @@ from isec.environment.base import Sprite, Pos
 
 from game.objects.menu.buttons import PlayButton, OptionButton, QuitButton
 from game.objects.menu.decoration import Sea, Stars, Boat, Constellation
+from game.instances.world import World
 
 
 class Menu(BaseInstance):

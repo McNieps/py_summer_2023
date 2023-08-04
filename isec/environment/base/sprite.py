@@ -22,7 +22,6 @@ class Sprite:
                  rendering_technique: RenderingTechniques.TYPING = "static",
                  blit_flag: int = 0,) -> None:
 
-        print(blit_flag)
         self.surface = surface
         self.rect = self.surface.get_rect()
         self.max_rect = self.rect.copy()
