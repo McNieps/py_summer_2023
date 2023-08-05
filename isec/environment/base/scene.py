@@ -5,11 +5,15 @@ from isec.environment.base.camera import Camera
 
 class Scene:
     def __init__(self,
-                 surface: pygame.Surface = None) -> None:
+                 surface: pygame.Surface = None,
+                 camera: Camera = None) -> None:
 
         if surface is None:
             surface = pygame.display.get_surface()
 
-        self.camera = Camera()
+        if camera is None:
+            camera = Camera()
+
+        self.camera = camera
         self.surface = surface
         self.rect = self.surface.get_rect()

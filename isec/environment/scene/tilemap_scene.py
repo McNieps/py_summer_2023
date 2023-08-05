@@ -11,9 +11,10 @@ class TilemapScene(Scene):
     def __init__(self,
                  tilemap: list[list[int]],
                  tileset: dict[int, pygame.Surface],
-                 surface: pygame.Surface = None) -> None:
+                 surface: pygame.Surface = None,
+                 camera: Camera = None) -> None:
 
-        super().__init__(surface)
+        super().__init__(surface, camera)
 
         self.tilemap = tilemap
         self.tilemap_size = len(tilemap[0]), len(tilemap)

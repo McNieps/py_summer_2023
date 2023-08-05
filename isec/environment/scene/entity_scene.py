@@ -10,9 +10,10 @@ from isec.environment.position.pymunk_pos import PymunkPos
 class EntityScene(Scene):
     def __init__(self,
                  surface: pygame.Surface = None,
-                 entities: list[Entity] = None):
+                 entities: list[Entity] = None,
+                 camera: Camera = None) -> None:
 
-        super().__init__(surface)
+        super().__init__(surface, camera)
 
         if entities is None:
             entities = []

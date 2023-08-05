@@ -7,10 +7,10 @@ import pymunk
 from pymunk.autogeometry import march_soft, march_hard
 from collections.abc import Iterable, Sequence
 
-from isec.environment.position.advanced_pos import AdvancedPos
+from isec.environment.base import Pos
 
 
-class PymunkPos(AdvancedPos):
+class PymunkPos(Pos):
     TYPE_DYNAMIC = pymunk.Body.DYNAMIC
     TYPE_KINEMATIC = pymunk.Body.KINEMATIC
     TYPE_STATIC = pymunk.Body.STATIC
@@ -31,27 +31,31 @@ class PymunkPos(AdvancedPos):
 
         if base_shape_density is None:
             base_shape_density = self.BASE_DENSITY
-
         if base_shape_friction is None:
             base_shape_friction = self.BASE_FRICTION
-
         if base_shape_elasticity is None:
             base_shape_elasticity = self.BASE_ELASTICITY
 
-        self.body: pymunk.Body = pymunk.Body(0, 0, body_type=body_type)
-        self.shapes: list[pymunk.Shape] = []
         self.base_shape_density: float = base_shape_density
         self.base_shape_friction: float = base_shape_friction
         self.base_shape_elasticity: float = base_shape_elasticity
 
+        body: pymunk.Body = pymunk.Body(0, 0, body_type=body_type)
+        shapes: list[pymunk.Shape] = []
+
         super().__init__(position=position,
                          speed=speed,
                          a=a,
-                         va=va)
+                         va=va,
+                         body=body,
+                         shapes=shapes)
+
+        print(self.body)
 
     def update(self,
                delta: float) -> None:
         pass
+
 
     def _set_shape_characteristics(self,
                                    shape: pymunk.Shape,
@@ -92,6 +96,7 @@ class PymunkPos(AdvancedPos):
 
     def create_surface_shape(self,
                              surface: pygame.Surface,
+                             scale: float = 1,
                              offset: Sequence[float, float] = (0, 0),
                              march_type: typing.Literal["soft", "hard"] = "soft",
                              radius: float = -1,
@@ -109,15 +114,15 @@ class PymunkPos(AdvancedPos):
         # First decomposition
         if march_type == "soft":
             polygons = list(march_soft(surface_bounding_box,
-                                       int(size[0]*0.4),
-                                       int(size[1]*0.4),
+                                       int(size[0]*scale),
+                                       int(size[1]*scale),
                                        0,
                                        sample_function))
 
         elif march_type == "hard":
             polygons = list(march_hard(surface_bounding_box,
-                                       int(size[0]*0.4),
-                                       int(size[1]*0.4),
+                                       int(size[0]*scale),
+                                       int(size[1]*scale),
                                        0,
                                        sample_function))
 

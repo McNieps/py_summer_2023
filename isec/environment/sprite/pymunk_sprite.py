@@ -1,15 +1,17 @@
 import pygame
 import pymunk
 
-from isec.environment.base import Sprite, RenderingTechniques
-from isec.environment.position.pymunk_pos import PymunkPos
+from isec.environment.base import Sprite, Pos, RenderingTechniques
 
 
 class PymunkSprite(Sprite):
     def __init__(self,
-                 pymunk_pos: PymunkPos,
+                 pymunk_pos: Pos,
                  rendering_technique: RenderingTechniques.TYPING = "static",
                  blit_flag: int = 0,) -> None:
+
+        if pymunk_pos.body is None:
+            raise ValueError("Position must be of type PymunkPos")
 
         if len(pymunk_pos.shapes) == 0:
             raise ValueError("PymunkPos must have at least one shape")

@@ -3,11 +3,9 @@ import pygame
 from isec.app import Resource
 from isec.instance import BaseInstance, LoopHandler
 from isec.environment import EntityScene
-from isec.environment.base import Sprite, Pos
 
 from game.objects.menu.buttons import PlayButton, OptionButton, QuitButton
 from game.objects.menu.decoration import Sea, Stars, Boat, Constellation
-from game.instances.world import World
 
 
 class Menu(BaseInstance):
@@ -46,4 +44,3 @@ if __name__ == '__main__':
         await Menu().execute()
 
     asyncio.run(main())
-

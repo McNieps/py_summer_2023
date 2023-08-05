@@ -2,14 +2,16 @@ import asyncio
 import numpy
 import pymunk
 import pygame
+import math
+import time
 
 from isec.app import App
-from game.instances.tutorial_instance import TutorialInstance
+from game.instances.menu import Menu
 
 
 async def main():
     App.init("game/assets/")
-    await TutorialInstance().execute()
+    await Menu().execute()
 
 
 asyncio.run(main())
