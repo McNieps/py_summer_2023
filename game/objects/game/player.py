@@ -28,6 +28,10 @@ class Player(Entity):
         self.exploration_velocity = 1000000
         self.chase_velocity = 2500000
 
+        self.torque_mult = 1
+
+        self.boost_mult = 20
+
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
     def update(self,
@@ -67,10 +71,10 @@ class Player(Entity):
         if angle_difference is None:
             return
 
-        torque = angle_difference * delta * 10
+        torque = angle_difference * delta * self.torque_mult
 
-        self.position.body.apply_impulse_at_world_point((0, torque), (10, 0))
-        self.position.body.apply_impulse_at_world_point((0, torque), (-10, 0))
+        self.position.body.apply_force_at_world_point((0, -torque), (self.position.position[0] + 50000, 0))
+        self.position.body.apply_force_at_world_point((0, torque), (self.position.position[0] - 50000, 0))
 
     def move_player(self,
                     delta: float) -> None:
@@ -101,11 +105,12 @@ class Player(Entity):
         if -90 < difference < 90:
             mult = 1+math.cos(math.radians(difference))
             if self.pressed["boost"]:
-                mult *= 2
-                print("HIIIIAAA")
+                mult *= self.boost_mult
+
             speed *= mult
 
-        self.position.body.apply_force_at_world_point(tuple(speed), tuple(self.position.position))
+        speed.rotate_ip(-forward_angle)
+        self.position.body.apply_force_at_local_point(tuple(speed), (0, 0))
 
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 

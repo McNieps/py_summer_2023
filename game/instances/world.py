@@ -5,9 +5,9 @@ from isec.instance import BaseInstance, LoopHandler
 from isec.environment import TilemapScene, EntityScene
 from isec.environment.base import Entity
 from isec.environment.sprite import PymunkSprite
-from isec.gui import Button
 
 from game.objects.game.player import Player
+from game.objects.game.player_spotlight import PlayerSpotlight
 
 
 class World(BaseInstance):
@@ -28,6 +28,8 @@ class World(BaseInstance):
         self.player_col = Entity(self.player.position, PymunkSprite(self.player.position))
         self.player.add_control_callbacks(self)
 
+        self.entity_scene.add_entities(self.player, PlayerSpotlight(self.player.position))
+
         async def swap_velocity():
             if self.player.velocity == self.player.exploration_velocity:
                 self.player.velocity = self.player.chase_velocity
@@ -36,8 +38,6 @@ class World(BaseInstance):
 
             self.player.velocity = self.player.exploration_velocity
             print('exploration velocity')
-
-        self.entity_scene.add_entities(self.player)   # , self.player_col)
 
         self.event_handler.register_buttonpressed_callback(2, self.move_camera)
         self.event_handler.register_buttondown_callback(4, self.increment_inter_tile)
