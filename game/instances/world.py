@@ -12,11 +12,11 @@ from game.objects.game.player import Player
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "test") -> None:
+                 map_name: str = "map") -> None:
 
         super().__init__()
         tile_map = Resource.data["maps"][map_name]
-        tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["tileset_1"], 8, 0, 1)
+        tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["simple"], 8, 0, 1)
 
         self.tilemap_scene = TilemapScene(tile_map,
                                           tile_set)
@@ -37,15 +37,14 @@ class World(BaseInstance):
             self.player.velocity = self.player.exploration_velocity
             print('exploration velocity')
 
-        self.button = Button(self, self.entity_scene, up_callback=swap_velocity)
 
         self.entity_scene.add_entities(self.player)   # , self.player_col)
-        self.entity_scene.add_entities(self.button)
 
         self.event_handler.register_buttonpressed_callback(2, self.move_camera)
         self.event_handler.register_buttondown_callback(4, self.increment_inter_tile)
         self.event_handler.register_buttonup_callback(5, self.decrement_inter_tile)
         self.event_handler.register_keyup_callback(pygame.K_ESCAPE, self.quit_instance)
+        self.event_handler.register_keydown_callback(pygame.K_LALT, swap_velocity)
 
     async def loop(self) -> None:
         self.window.fill(Resource.data["color"]["list"][-1])
