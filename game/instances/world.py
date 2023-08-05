@@ -21,9 +21,9 @@ class World(BaseInstance):
                                           tile_set)
         self.entity_scene = EntityScene(camera=self.tilemap_scene.camera)
 
-        self.entity_scene.space.damping = 1
+        self.entity_scene.space.damping = 0.4
 
-        self.player = Player()
+        self.player = Player(self.entity_scene)
         self.player_col = Entity(self.player.position, PymunkSprite(self.player.position))
         self.player.add_control_callbacks(self)
 

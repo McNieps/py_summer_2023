@@ -48,4 +48,4 @@ class EntityScene(Scene):
             camera = self.camera
 
         for entity in self.entities:
-            entity.render(camera.get_offset(entity.position), self.surface, self.rect)
+            entity.render(camera.get_offset_pos(entity.position), self.surface, self.rect)

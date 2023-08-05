@@ -14,8 +14,8 @@ class Camera:
         else:
             self.position = Pos(*position)
 
-    def get_offset(self,
-                   position: Pos) -> pygame.math.Vector2:
+    def get_offset_pos(self,
+                       position: Pos) -> pygame.math.Vector2:
 
         return position.position - self.position.position
 

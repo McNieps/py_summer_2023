@@ -2,12 +2,10 @@ import pygame
 
 
 class Controls:
-    FORWARD = pygame.K_z
-    BACKWARD = pygame.K_s
+    UP = pygame.K_z
+    DOWN = pygame.K_s
     LEFT = pygame.K_q
     RIGHT = pygame.K_d
-    UP = pygame.K_SPACE
-    DOWN = pygame.K_LCTRL
     BOOST = pygame.K_LSHIFT
     PAUSE = pygame.K_ESCAPE
     DEBUG = pygame.K_F3

@@ -164,7 +164,7 @@ class PymunkPos(Pos):
 
     @property
     def a(self) -> float:
-        return -math.degrees(self.body.angle)
+        return -math.degrees(self.body.angle) % 360
 
     @a.setter
     def a(self, a: float) -> None:
