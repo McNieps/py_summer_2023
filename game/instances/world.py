@@ -12,11 +12,11 @@ from game.objects.game.player import Player
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "map") -> None:
+                 map_name: str = "map_test") -> None:
 
         super().__init__()
         tile_map = Resource.data["maps"][map_name]
-        tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["simple"], 8, 0, 1)
+        tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["tileset_1"], 8, 0, 1)
 
         self.tilemap_scene = TilemapScene(tile_map,
                                           tile_set)

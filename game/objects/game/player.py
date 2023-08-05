@@ -101,7 +101,7 @@ class Player(Entity):
         if -90 < difference < 90:
             mult = 1+math.cos(math.radians(difference))
             if self.pressed["boost"]:
-                mult *= 5
+                mult *= 2
                 print("HIIIIAAA")
             speed *= mult
 
