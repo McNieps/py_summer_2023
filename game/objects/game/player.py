@@ -24,6 +24,9 @@ class Player(Entity):
         super().__init__(position, sprite)
 
         self.sprite_flipped = False
+        self.velocity = 1000000
+        self.exploration_velocity = 1000000
+        self.chase_velocity = 2500000
 
         self.pressed = {"up": False, "down": False, "left": False, "right": False}
 
@@ -94,7 +97,7 @@ class Player(Entity):
         if difference > 180:
             difference -= 360
 
-        speed = input_vec * delta * 1000000
+        speed = input_vec * delta * self.velocity
         if -90 < difference < 90:
             speed *= 1+math.cos(math.radians(difference))
 

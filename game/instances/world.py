@@ -5,29 +5,42 @@ from isec.instance import BaseInstance, LoopHandler
 from isec.environment import TilemapScene, EntityScene
 from isec.environment.base import Entity
 from isec.environment.sprite import PymunkSprite
+from isec.gui import Button
 
 from game.objects.game.player import Player
 
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "map") -> None:
+                 map_name: str = "test") -> None:
 
         super().__init__()
         tile_map = Resource.data["maps"][map_name]
-        tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["simple"], 8, 0, 1)
+        tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["tileset_1"], 8, 0, 1)
 
         self.tilemap_scene = TilemapScene(tile_map,
                                           tile_set)
         self.entity_scene = EntityScene(camera=self.tilemap_scene.camera)
 
-        self.entity_scene.space.damping = 0.4
+        self.entity_scene.space.damping = 0.2
 
         self.player = Player(self.entity_scene)
         self.player_col = Entity(self.player.position, PymunkSprite(self.player.position))
         self.player.add_control_callbacks(self)
 
+        async def swap_velocity():
+            if self.player.velocity == self.player.exploration_velocity:
+                self.player.velocity = self.player.chase_velocity
+                print('chase velocity')
+                return
+
+            self.player.velocity = self.player.exploration_velocity
+            print('exploration velocity')
+
+        self.button = Button(self, self.entity_scene, up_callback=swap_velocity)
+
         self.entity_scene.add_entities(self.player)   # , self.player_col)
+        self.entity_scene.add_entities(self.button)
 
         self.event_handler.register_buttonpressed_callback(2, self.move_camera)
         self.event_handler.register_buttondown_callback(4, self.increment_inter_tile)
