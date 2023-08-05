@@ -12,7 +12,7 @@ class Menu(BaseInstance):
     def __init__(self):
         super().__init__(Resource.data["instances"]["menu"]["fps"])
 
-        self.scene = EntityScene()
+        self.scene = EntityScene(Resource.data["instances"]["menu"]["fps"])
 
         self.scene.add_entities(Sea(),
                                 Stars(),
@@ -30,7 +30,6 @@ class Menu(BaseInstance):
         pygame.draw.rect(self.window, Resource.data["color"]["list"][-1], pygame.Rect(0, 0, 400, 148))
         self.scene.update(self.delta)
         self.scene.render()
-
 
 if __name__ == '__main__':
     import asyncio

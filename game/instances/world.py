@@ -14,13 +14,13 @@ class World(BaseInstance):
     def __init__(self,
                  map_name: str = "map_test") -> None:
 
-        super().__init__()
+        super().__init__(fps=120)
         tile_map = Resource.data["maps"][map_name]
         tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["tileset_1"], 8, 0, 1)
 
         self.tilemap_scene = TilemapScene(tile_map,
                                           tile_set)
-        self.entity_scene = EntityScene(camera=self.tilemap_scene.camera)
+        self.entity_scene = EntityScene(120, camera=self.tilemap_scene.camera)
 
         self.entity_scene.space.damping = 0.2
 
@@ -46,9 +46,14 @@ class World(BaseInstance):
         self.event_handler.register_keydown_callback(pygame.K_LALT, swap_velocity)
 
     async def loop(self) -> None:
+        LoopHandler.fps_caption()
         self.window.fill(Resource.data["color"]["list"][-1])
         self.tilemap_scene.update(self.delta)
         self.entity_scene.update(self.delta)
+
+        self.entity_scene.camera.position.position[0] = self.player.position.position[0] - 200
+        self.entity_scene.camera.position.position[1] = self.player.position.position[1] - 150
+
         self.tilemap_scene.render()
         self.entity_scene.render()
 

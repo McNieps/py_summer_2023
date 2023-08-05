@@ -9,6 +9,7 @@ from isec.environment.position.pymunk_pos import PymunkPos
 
 class EntityScene(Scene):
     def __init__(self,
+                 fps: int,
                  surface: pygame.Surface = None,
                  entities: list[Entity] = None,
                  camera: Camera = None) -> None:
@@ -19,6 +20,7 @@ class EntityScene(Scene):
             entities = []
         self.entities = entities
 
+        self.avg_delta = 1 / fps
         self.space = pymunk.Space()
 
     def add_entities(self,
@@ -39,7 +41,11 @@ class EntityScene(Scene):
         for entity in self.entities:
             entity.update(delta)
 
-        self.space.step(delta)
+        for entity in reversed(self.entities):
+            if entity.to_delete:
+                self.entities.remove(entity)
+
+        self.space.step(self.avg_delta)
 
     def render(self,
                camera: Camera = None) -> None:

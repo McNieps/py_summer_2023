@@ -11,6 +11,7 @@ class Entity:
                  position: Pos,
                  sprite: Sprite) -> None:
 
+        self.to_delete: bool = False
         self.position: Pos = position
         self.sprite: Sprite = sprite
 

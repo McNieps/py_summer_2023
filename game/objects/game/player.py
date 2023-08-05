@@ -1,5 +1,6 @@
 import pygame
 import math
+import time
 
 from isec.app import Resource
 from isec.environment import Entity, Sprite, EntityScene
@@ -7,6 +8,7 @@ from isec.environment.position import PymunkPos
 from isec.instance import BaseInstance
 
 from game.objects.controls import Controls
+from game.objects.game.bubble import Bubble
 
 
 class Player(Entity):
@@ -29,8 +31,11 @@ class Player(Entity):
         self.chase_velocity = 2500000
 
         self.torque_mult = 1
+        self.boost_mult = 5
 
-        self.boost_mult = 20
+        self.max_bubble_spawn_frequency = 200
+        self.max_speed_max_frequency = 200
+        self.bubble_last_spawn = time.time()
 
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
@@ -38,13 +43,13 @@ class Player(Entity):
                delta: float) -> None:
 
         super().update(delta)
-        self.position.body.angular_velocity *= 0.1 ** delta
+        self.position.body.angular_velocity *= 0.02 ** delta
 
         angle_difference = self.get_angle_cursor_player()
 
         self.rotate_player(angle_difference, delta)
         self.move_player(delta)
-
+        self.spawn_bubble(delta)
         self.flip_sprite()
 
     def get_angle_cursor_player(self) -> float | None:
@@ -121,6 +126,21 @@ class Player(Entity):
         elif (self.position.a < 90 or self.position.a > 270) and self.sprite_flipped:
             self.sprite_flipped = False
             self.sprite.surface = pygame.transform.flip(self.sprite.surface, False, True)
+
+    def spawn_bubble(self, delta) -> None:
+        print(self.position.body.velocity.length)
+        bubble_spawn_frequency = self.position.body.velocity.length / self.max_speed_max_frequency * self.max_bubble_spawn_frequency
+        if bubble_spawn_frequency < 0.05:
+            return
+
+        bubble_spawn_period = 1 / bubble_spawn_frequency
+
+        diff = time.time() - self.bubble_last_spawn
+        while diff >= bubble_spawn_period:
+            diff -= bubble_spawn_period
+            self.bubble_last_spawn += bubble_spawn_period
+            self.linked_scene.add_entities(Bubble(tuple(self.position.position-4*self.position.body.rotation_vector),
+                                                  self.position.body.rotation_vector.angle_degrees))
 
     async def up(self) -> None:
         self.pressed["up"] = True
