@@ -61,6 +61,9 @@ class Player(Entity):
                       angle_difference: float,
                       delta: float) -> None:
 
+        if angle_difference is None:
+            return
+
         torque = angle_difference * delta * 10
 
         self.position.body.apply_impulse_at_world_point((0, torque), (10, 0))
@@ -90,10 +93,9 @@ class Player(Entity):
         difference = (input_angle - forward_angle) % 360
         if difference > 180:
             difference -= 360
-        print(difference)
+
         speed = input_vec * delta * 1000000
         if -90 < difference < 90:
-            print("i")
             speed *= 1+math.cos(math.radians(difference))
 
         self.position.body.apply_force_at_world_point(tuple(speed), tuple(self.position.position))
