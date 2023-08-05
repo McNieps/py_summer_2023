@@ -37,7 +37,6 @@ class World(BaseInstance):
             self.player.velocity = self.player.exploration_velocity
             print('exploration velocity')
 
-
         self.entity_scene.add_entities(self.player)   # , self.player_col)
 
         self.event_handler.register_buttonpressed_callback(2, self.move_camera)

@@ -28,7 +28,7 @@ class Player(Entity):
         self.exploration_velocity = 1000000
         self.chase_velocity = 2500000
 
-        self.pressed = {"up": False, "down": False, "left": False, "right": False}
+        self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
     def update(self,
                delta: float) -> None:
@@ -88,7 +88,7 @@ class Player(Entity):
             input_vec += (1, 0)
 
         if input_vec.length() <= 0:
-            self.pressed = {"up": False, "down": False, "left": False, "right": False}
+            self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
             return
 
         input_vec.normalize_ip()
@@ -99,11 +99,15 @@ class Player(Entity):
 
         speed = input_vec * delta * self.velocity
         if -90 < difference < 90:
-            speed *= 1+math.cos(math.radians(difference))
+            mult = 1+math.cos(math.radians(difference))
+            if self.pressed["boost"]:
+                mult *= 5
+                print("HIIIIAAA")
+            speed *= mult
 
         self.position.body.apply_force_at_world_point(tuple(speed), tuple(self.position.position))
 
-        self.pressed = {"up": False, "down": False, "left": False, "right": False}
+        self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
     def flip_sprite(self) -> None:
         if (90 < self.position.a < 270) and not self.sprite_flipped:
@@ -125,8 +129,12 @@ class Player(Entity):
     async def right(self) -> None:
         self.pressed["right"] = True
 
+    async def boost(self) -> None:
+        self.pressed["boost"] = True
+
     def add_control_callbacks(self, linked_instance: BaseInstance) -> None:
         linked_instance.event_handler.register_keypressed_callback(Controls.UP, self.up)
         linked_instance.event_handler.register_keypressed_callback(Controls.DOWN, self.down)
         linked_instance.event_handler.register_keypressed_callback(Controls.LEFT, self.left)
         linked_instance.event_handler.register_keypressed_callback(Controls.RIGHT, self.right)
+        linked_instance.event_handler.register_keypressed_callback(Controls.BOOST, self.boost)
