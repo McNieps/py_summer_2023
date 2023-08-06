@@ -14,25 +14,27 @@ from game.objects.game.collision_types import CollisionTypes
 
 class Player(Entity):
     def __init__(self,
-                 linked_scene: EntityScene) -> None:
+                 linked_scene: EntityScene,
+                 initial_pos: tuple[int, int] = (100, 100)) -> None:
 
         self.linked_scene = linked_scene
 
-        position = PymunkPos(position=(100, 100), shape_collision_type=CollisionTypes.PLAYER)
+        position = PymunkPos(position=initial_pos, shape_collision_type=CollisionTypes.PLAYER)
         player_surface = Resource.image["game"]["submarine_1"]
-        position.create_rect_shape(player_surface, density=50, radius=-1.5)
+        # position.create_rect_shape(player_surface, density=50, radius=-1.5)
+        position.create_circle_shape(2, friction=0.2, density=50)
 
         sprite = Sprite(player_surface, rendering_technique="rotated")
 
         super().__init__(position, sprite)
 
         self.sprite_flipped = False
-        self.velocity = 1000000
-        self.exploration_velocity = 1000000
-        self.chase_velocity = 2500000
 
-        self.torque_mult = 1
-        self.boost_mult = 5
+        self.exploration_velocity = 3_500_000
+        self.chase_velocity = 5_000_000
+        self.velocity = self.exploration_velocity
+
+        self.torque_mult = 0.5
         self.boost_mult = 5
 
         self.max_bubble_spawn_frequency = 200

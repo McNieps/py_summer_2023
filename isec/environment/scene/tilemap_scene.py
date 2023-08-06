@@ -118,14 +118,14 @@ class TilemapScene(Scene):
                     collision_map[y][x] = False
                     continue
 
-                if any((tilemap[y-1][x] == cls.EMPTY_TILE,
-                        tilemap[y+1][x] == cls.EMPTY_TILE,
-                        tilemap[y][x-1] == cls.EMPTY_TILE,
-                        tilemap[y][x+1] == cls.EMPTY_TILE,
-                        tilemap[y-1][x-1] == cls.EMPTY_TILE,
-                        tilemap[y-1][x+1] == cls.EMPTY_TILE,
-                        tilemap[y+1][x-1] == cls.EMPTY_TILE,
-                        tilemap[y+1][x+1] == cls.EMPTY_TILE)):
+                if any((tilemap[y-1][x] not in collision_tile,
+                        tilemap[y+1][x] not in collision_tile,
+                        tilemap[y][x-1] not in collision_tile,
+                        tilemap[y][x+1] not in collision_tile,
+                        tilemap[y-1][x-1] not in collision_tile,
+                        tilemap[y-1][x+1] not in collision_tile,
+                        tilemap[y+1][x-1] not in collision_tile,
+                        tilemap[y+1][x+1] not in collision_tile)):
 
                     collision_map[y][x] = True
                 else:
