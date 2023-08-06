@@ -6,10 +6,6 @@ from isec.app import Resource
 from isec.environment import Entity, Sprite, Pos
 
 
-def sign(n):
-    return (n > 0) - (n < 0)
-
-
 class PlayerSpotlight(Entity):
     def __init__(self,
                  player_position: Pos,
