@@ -9,6 +9,7 @@ from isec.instance import BaseInstance
 
 from game.objects.controls import Controls
 from game.objects.game.bubble import Bubble
+from game.objects.game.collision_types import CollisionTypes
 
 
 class Player(Entity):
@@ -17,7 +18,7 @@ class Player(Entity):
 
         self.linked_scene = linked_scene
 
-        position = PymunkPos(position=(100, 100))
+        position = PymunkPos(position=(100, 100), shape_collision_type=CollisionTypes.PLAYER)
         player_surface = Resource.image["game"]["submarine_1"]
         position.create_rect_shape(player_surface, density=50, radius=-1.5)
 

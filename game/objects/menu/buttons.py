@@ -27,6 +27,7 @@ class PlayButton(Button):
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
+            Resource.sound["effect"]["click_1"].play()
 
         async def pressed_callback() -> None:
             self.hovered = True
@@ -36,6 +37,7 @@ class PlayButton(Button):
         async def up_callback() -> None:
             x = World()
             await x.execute()
+            Resource.sound["effect"]["click_2"].play()
 
         super().__init__(linked_instance,
                          linked_scene,
@@ -71,6 +73,7 @@ class OptionButton(Button):
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
+            Resource.sound["effect"]["click_1"].play()
 
         async def pressed_callback() -> None:
             self.hovered = True
@@ -79,6 +82,7 @@ class OptionButton(Button):
 
         async def up_callback() -> None:
             print("Settings")
+            Resource.sound["effect"]["click_2"].play()
 
         super().__init__(linked_instance,
                          linked_scene,
@@ -114,6 +118,7 @@ class QuitButton(Button):
             self.hovered = True
             self.sprite.frame_durations = [0, 1]
             self.sprite.current_frame = 1
+            Resource.sound["effect"]["click_1"].play()
 
         async def pressed_callback() -> None:
             self.hovered = True
@@ -121,6 +126,7 @@ class QuitButton(Button):
             self.sprite.current_frame = 1
 
         async def up_callback() -> None:
+            Resource.sound["effect"]["click_2"].play()
             LoopHandler.stop_game()
 
         super().__init__(linked_instance,

@@ -135,7 +135,6 @@ class PlayerSpotlight(Entity):
 
         for i, coord in enumerate(coordinates):
             if diam := int(hit_strength[i]*self.light_bulb_size[i]):
-                print(diam)
                 bulb_rect = pygame.Rect((0, 0), (diam, diam))
                 bulb_rect.center = coord
                 pygame.draw.ellipse(self.surface, Resource.data["color"]["list"][-5], bulb_rect)

@@ -12,14 +12,17 @@ class TileCollision(Entity):
                  tile_size: int,
                  wall_friction: float = None,
                  wall_elasticity: float = None,
-                 show_collision: bool = False) -> None:
+                 show_collision: bool = False,
+                 collision_type: int = None) -> None:
 
         self.collision_map = collision_map
         self.tile_size = tile_size
 
         position = PymunkPos(body_type=PymunkPos.TYPE_STATIC,
                              base_shape_friction=wall_friction,
-                             base_shape_elasticity=wall_elasticity)
+                             base_shape_elasticity=wall_elasticity,
+                             shape_collision_type=collision_type)
+
         self._build_collision_shape(position)
 
         if show_collision:
@@ -43,6 +46,5 @@ class TileCollision(Entity):
                     tile_shape = pymunk.Poly(position.body,
                                              vertices,
                                              radius=-0.5)
-
-                    tile_shape.position = (x*8+8, y*8)
+                    position.set_shape_characteristics(tile_shape)
                     position.shapes.append(tile_shape)

@@ -12,6 +12,7 @@ from isec.environment.tile_utils import TileCollision
 
 from game.objects.game.player import Player
 from game.objects.game.player_spotlight import PlayerSpotlight
+from game.objects.game.collision_types import CollisionTypes
 
 
 class World(BaseInstance):
@@ -48,9 +49,20 @@ class World(BaseInstance):
                                            self.tile_size)
 
         tile_collision = TileCollision(self.collision_map,
-                                       self.tile_size)
+                                       self.tile_size,
+                                       collision_type=CollisionTypes.WALL)
 
         self.entity_scene.add_entities(self.player, tile_collision, player_spotlight)
+
+        # Collision callbacks
+        t = self.entity_scene.space.add_collision_handler(CollisionTypes.PLAYER, CollisionTypes.WALL)
+
+        def post_step(arbiter, space, data):
+            if arbiter.is_first_contact:
+                print(arbiter.total_ke)
+            return True
+
+        t.post_solve = post_step
 
         # Callbacks
         self.player.add_control_callbacks(linked_instance=self)
@@ -75,7 +87,6 @@ class World(BaseInstance):
         surf = pygame.Surface((400, 300))
         surf.fill(Resource.data["color"]["list"][-2])
         self.window.blit(surf, (0, 0), special_flags=pygame.BLEND_SUB)
-
 
     async def move_camera(self) -> None:
         self.tilemap_scene.camera.position.position -= pygame.math.Vector2(self.event_handler.mouse_rel) / 6
