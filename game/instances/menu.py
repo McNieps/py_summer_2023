@@ -11,7 +11,8 @@ from game.objects.menu.decoration import Sea, Stars, Boat, Constellation
 class Menu(BaseInstance):
     def __init__(self):
         super().__init__(Resource.data["instances"]["menu"]["fps"])
-
+        pygame.mixer.music.load(Resource.project_assets_directory + "sound/music/menu.ogg")
+        pygame.mixer.music.play(-1)
         self.scene = EntityScene(Resource.data["instances"]["menu"]["fps"])
 
         self.scene.add_entities(Sea(),
