@@ -3,7 +3,7 @@ import pygame
 from isec.app import Resource
 from isec.instance import BaseInstance, LoopHandler
 from isec.environment import TilemapScene, EntityScene
-from isec.environment.base import Entity
+from isec.environment.base import Entity, Pos
 from isec.environment.sprite import PymunkSprite
 
 from game.objects.game.player import Player
@@ -28,7 +28,8 @@ class World(BaseInstance):
         self.player_col = Entity(self.player.position, PymunkSprite(self.player.position))
         self.player.add_control_callbacks(self)
 
-        self.entity_scene.add_entities(self.player, PlayerSpotlight(self.player.position))
+        self.player_spotlight = PlayerSpotlight(self.player.position)
+        self.entity_scene.add_entities(self.player)
 
         async def swap_velocity():
             if self.player.velocity == self.player.exploration_velocity:
@@ -56,6 +57,23 @@ class World(BaseInstance):
 
         self.tilemap_scene.render()
         self.entity_scene.render()
+
+        spotlight_points = self.player_spotlight.create_spotlight_youtube(self.tilemap_scene.tilemap, 8)
+        for i in range(len(spotlight_points)):
+            spotlight_points[i] = self.entity_scene.camera.get_offset_pos(Pos(position=spotlight_points[i]))
+
+        for point in []:  # spotlight_points:
+            pygame.draw.circle(self.window,
+                               (255, 255, 255),
+                               point,
+                               2)
+
+        pygame.draw.polygon(self.window,
+                            Resource.data["color"]["list"][1],
+                            spotlight_points,
+                            )
+
+
 
     async def move_camera(self) -> None:
         self.tilemap_scene.camera.position.position -= pygame.math.Vector2(self.event_handler.mouse_rel) / 6

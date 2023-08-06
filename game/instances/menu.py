@@ -31,6 +31,7 @@ class Menu(BaseInstance):
         self.scene.update(self.delta)
         self.scene.render()
 
+
 if __name__ == '__main__':
     import asyncio
 

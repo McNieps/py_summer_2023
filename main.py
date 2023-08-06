@@ -5,7 +5,7 @@ import pygame
 import math
 import time
 
-from isec.app import App
+from isec.app import App, Resource
 from game.instances.menu import Menu
 
 
