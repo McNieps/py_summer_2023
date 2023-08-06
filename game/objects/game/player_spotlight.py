@@ -19,11 +19,11 @@ class PlayerSpotlight(Entity):
         self.collision_map = collision_map
         self.tile_size = tile_size
 
-        self.number_of_points = 25
+        self.number_of_points = 50
         self.radius = 150
-        self.opening_angle = 45
-        self.max_bulb_size = 20
-        self.min_bulb_size = 12
+        self.opening_angle = 50
+        self.max_bulb_size = 10
+        self.min_bulb_size = 6
 
         self.surface_size = (self.radius*2 + self.max_bulb_size*2,
                              self.radius*2 + self.max_bulb_size*2)
@@ -64,6 +64,7 @@ class PlayerSpotlight(Entity):
 
         for i in range(self.number_of_points):
             angle = -self.position.a - self.opening_angle/2 + i * self.opening_angle/(self.number_of_points - 1)
+
             vec_ray_dir = pygame.Vector2(1, 0).rotate(angle)
             vec_start_cell = pygame.Vector2(math.floor(vec_ray_start[0]),
                                             math.floor(vec_ray_start[1]))
@@ -118,6 +119,8 @@ class PlayerSpotlight(Entity):
                 if self.collision_map[math.floor(vec_map_check[1])][math.floor(vec_map_check[0])]:
                     tile_found = True
 
+            if tile_found:
+                current_distance += self.light_bulb_size[i+1]/15
             strength = 1 - current_distance / max_distance
             strength = 2 * strength if strength < 0.5 else 1
             hit_strength.append(strength)
@@ -132,12 +135,14 @@ class PlayerSpotlight(Entity):
     def create_spotlight_surface(self) -> None:
         coordinates, hit_strength = self.create_spotlight_boundaries()
         self.surface.fill((0, 0, 0))
-        pygame.draw.polygon(self.surface, Resource.data["color"]["list"][-2], coordinates)
+        pygame.draw.polygon(self.surface, Resource.data["color"]["list"][-4], coordinates)
+
         for i, coord in enumerate(coordinates):
             if diam := int(hit_strength[i]*self.light_bulb_size[i]):
                 print(diam)
                 bulb_rect = pygame.Rect((0, 0), (diam, diam))
                 bulb_rect.center = coord
-                pygame.draw.ellipse(self.surface, Resource.data["color"]["list"][-3], bulb_rect)
+                pygame.draw.ellipse(self.surface, Resource.data["color"]["list"][-5], bulb_rect)
 
         self.surface.blit(Resource.image["game"]["spotlight_mask"], (0, 0), special_flags=pygame.BLEND_MULT)
+        self.surface = pygame.transform.box_blur(self.surface, 1)

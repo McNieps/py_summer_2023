@@ -139,7 +139,7 @@ class Player(Entity):
         while diff >= bubble_spawn_period:
             diff -= bubble_spawn_period
             self.bubble_last_spawn += bubble_spawn_period
-            self.linked_scene.add_entities(Bubble(tuple(self.position.position-4*self.position.body.rotation_vector),
+            self.linked_scene.add_entities(Bubble(tuple(self.position.position-2*self.position.body.rotation_vector),
                                                   self.position.body.rotation_vector.angle_degrees))
 
     async def up(self) -> None:
