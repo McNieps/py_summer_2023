@@ -28,7 +28,7 @@ class Player(Entity):
 
         self.sprite_flipped = False
         self.velocity = 1000000
-        self.exploration_velocity = 1000000
+        self.exploration_velocity = 1500000
         self.chase_velocity = 2500000
 
         self.torque_mult = 1
