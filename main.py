@@ -8,6 +8,8 @@ import time
 from isec.app import App, Resource
 from game.instances.menu import Menu
 
+__all__ = [asyncio, numpy, pymunk, pygame, math, time, App, Resource, Menu]
+
 
 async def main():
     App.init("game/assets/")

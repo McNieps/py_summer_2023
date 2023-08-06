@@ -59,15 +59,6 @@ class TilemapScene(Scene):
                              for y in range(start_y, end_y)
                              if self.tilemap[y][x] != -1])
 
-        """
-        for y in range(start_y, end_y):
-            coord_y = pos_y[y]
-            for x in range(start_x, end_x):
-                if (tile := self.tilemap[y][x]) != self.EMPTY_TILE:
-                    self.surface.blit(self.tileset[tile],
-                                      (pos_x[x], coord_y))
-        """
-
         return
 
     @classmethod
@@ -101,6 +92,46 @@ class TilemapScene(Scene):
 
     def update(self, delta):
         pass
+
+    @classmethod
+    def create_collision_map(cls,
+                             tilemap: list[list[int]],
+                             collision_tile: list[int]) -> list[list[bool]]:
+        """Function that return a collision map where every tile adjacent to void tiles is True and False otherwise."""
+
+        collision_map = []
+
+        for y, row in enumerate(tilemap):
+            collision_map.append([False] * len(row))
+
+            if y == 0 or y == len(tilemap) - 1:
+                collision_map[y] = [True] * len(row)
+                continue
+
+            for x, tile in enumerate(row):
+                if x == 0 or x == len(row) - 1:
+                    collision_map[y][x] = True
+                    continue
+
+                tile_id = tilemap[y][x]
+                if tile_id == cls.EMPTY_TILE or tile_id not in collision_tile:
+                    collision_map[y][x] = False
+                    continue
+
+                if any((tilemap[y-1][x] == cls.EMPTY_TILE,
+                        tilemap[y+1][x] == cls.EMPTY_TILE,
+                        tilemap[y][x-1] == cls.EMPTY_TILE,
+                        tilemap[y][x+1] == cls.EMPTY_TILE,
+                        tilemap[y-1][x-1] == cls.EMPTY_TILE,
+                        tilemap[y-1][x+1] == cls.EMPTY_TILE,
+                        tilemap[y+1][x-1] == cls.EMPTY_TILE,
+                        tilemap[y+1][x+1] == cls.EMPTY_TILE)):
+
+                    collision_map[y][x] = True
+                else:
+                    collision_map[y][x] = False
+
+        return collision_map
 
 
 if __name__ == '__main__':
