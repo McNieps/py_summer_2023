@@ -12,7 +12,7 @@ from game.objects.game.player_spotlight import PlayerSpotlight
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "map_test") -> None:
+                 map_name: str = "test") -> None:
 
         super().__init__(fps=120)
         tile_map = Resource.data["maps"][map_name]
