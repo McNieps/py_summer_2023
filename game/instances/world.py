@@ -17,7 +17,7 @@ from game.objects.game.collision_types import CollisionTypes
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "test") -> None:
+                 map_name: str = "abyss_4") -> None:
 
         super().__init__(fps=120)
 
@@ -83,10 +83,10 @@ class World(BaseInstance):
 
         self.tilemap_scene.render()
         self.entity_scene.render()
-        # self.window.blit(Resource.image["game"]["shadow"], (0, 0), special_flags=pygame.BLEND_MULT)
+        self.window.blit(Resource.image["game"]["shadow"], (0, 0), special_flags=pygame.BLEND_MULT)
         surf = pygame.Surface((400, 300))
         surf.fill(Resource.data["color"]["list"][-2])
-        self.window.blit(surf, (0, 0), special_flags=pygame.BLEND_SUB)
+        # self.window.blit(surf, (0, 0), special_flags=pygame.BLEND_SUB)
 
     async def move_camera(self) -> None:
         self.tilemap_scene.camera.position.position -= pygame.math.Vector2(self.event_handler.mouse_rel) / 6
