@@ -11,7 +11,7 @@ def sign(n):
 
 class PlayerSpotlight(Entity):
     def __init__(self, player_position: Pos) -> None:
-        self.number_of_points = 50
+        self.number_of_points = 500
         self.radius = 125
         self.opening_angle = 45
 
@@ -85,7 +85,7 @@ class PlayerSpotlight(Entity):
                 if tilemap[math.floor(vec_map_check[1])][math.floor(vec_map_check[0])] > -1:
                     tile_found = True
 
-            if tile_found:
+            if tile_found and current_distance < max_distance:
                 # calculate the intersection
                 coordinates.append(vec_ray_start + vec_ray_dir * current_distance)
 
