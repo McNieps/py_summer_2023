@@ -18,13 +18,14 @@ from game.objects.game.detector import Detector
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "abyss_1") -> None:
+                 map_name: str = "surface") -> None:
 
         super().__init__(fps=120)
 
         self.map_name: str = map_name
         self.map_dict: dict = {}
 
+        self.color = None
         self.scenes: list[Scene] = []
         self.entity_scene: EntityScene | None = None
         self.terrain_scene: TilemapScene | None = None
@@ -44,7 +45,7 @@ class World(BaseInstance):
     async def loop(self) -> None:
         LoopHandler.fps_caption()
 
-        self.window.fill(Resource.data["color"]["list"][-1])  # TODO: Load this color in map.json
+        self.window.fill(self.color)
 
         for scene in self.scenes:
             scene.update(self.delta)
@@ -65,6 +66,12 @@ class World(BaseInstance):
 
         self.map_name = map_name
         self.map_dict = Resource.data["maps"][map_name]
+
+        self.color = self.map_dict["graphics"]["color_id"]
+
+        if self.spawn_position is None:
+            self.spawn_position = self.map_dict["initial_condition"]["position"]
+            self.spawn_angle = self.map_dict["initial_condition"]["angle"]
 
         await self.purge_world()
         await self.create_scenes()
@@ -97,11 +104,8 @@ class World(BaseInstance):
                                                                TileHelper.get_collision_tile_id())
 
     async def create_entities(self) -> None:
-        self.player = Player(self.entity_scene, (1300, 1300))   # (850, 20))
 
-        player_spotlight = PlayerSpotlight(self.player.position,
-                                           self.collision_map,
-                                           TileHelper.tile_size)
+        self.player = Player(self.entity_scene, self.spawn_position)   # (850, 20))
 
         tile_collision = TileCollision(self.collision_map,
                                        TileHelper.tile_size,
@@ -112,17 +116,33 @@ class World(BaseInstance):
         for map_entities_dict in Resource.data["maps"][self.map_name]["entities"].values():
             additional_entities.append(self.create_entity_from_dict(map_entities_dict))
 
-        self.entity_scene.add_entities(self.player, tile_collision, *additional_entities, player_spotlight)
+        self.entity_scene.add_entities(self.player, tile_collision, *additional_entities)
+
+        if self.map_dict["graphics"]["spotlight_enabled"]:
+            player_spotlight = PlayerSpotlight(self.player.position,
+                                               self.collision_map,
+                                               TileHelper.tile_size)
+
+            self.entity_scene.add_entities(player_spotlight)
 
     async def generate_screen_filter(self) -> None:
-        filter_darkness = 0   # TODO: LINK WITH MAP DICT
+        if not self.map_dict["graphics"]["filter_enabled"] or self.map_dict["graphics"]["filter_brightness"] == 255:
+            self.screen_filter = pygame.Surface((1, 1), pygame.SRCALPHA)
+            return
 
+        filter_darkness = self.map_dict["graphics"]["filter_brightness"]
         self.screen_filter = Resource.image["game"]["shadow"].copy()
-        if filter_darkness > 0:
+
+        if filter_darkness < 0:
+            filter_darkness = abs(filter_darkness)
             surf = pygame.Surface((400, 300))
-            value = int(255 * filter_darkness)
-            surf.fill((value, value, value))
-            self.screen_filter.blit(surf, (0, 0), special_flags=pygame.BLEND_MULT)
+            surf.fill((filter_darkness, filter_darkness, filter_darkness))
+            self.screen_filter.blit(surf, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
+            return
+
+        surf = pygame.Surface((400, 300))
+        surf.fill((filter_darkness, filter_darkness, filter_darkness))
+        self.screen_filter.blit(surf, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
 
     async def create_callbacks(self) -> None:
         # Collision callbacks
@@ -150,6 +170,7 @@ class World(BaseInstance):
         self.event_handler.register_keyup_callback(pygame.K_ESCAPE, self.quit_instance)
         self.event_handler.register_keydown_callback(pygame.K_LALT, self.swap_velocity)
         self.event_handler.register_buttondown_callback(1, self.print_location)
+        self.event_handler.register_quit_callback(LoopHandler.stop_game)
 
     async def set_music(self) -> None:
         track_name = self.map_dict["music"]["track"]

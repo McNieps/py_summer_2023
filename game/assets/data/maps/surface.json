@@ -1,0 +1,33 @@
+{
+  "music": {
+    "track": "menu",
+    "volume": 1
+  },
+
+  "graphics": {
+    "color_id": 1,
+
+    "filter_enabled": false,
+    "filter_brightness": 0,
+
+    "spotlight_enabled": false
+  },
+
+  "initial_condition": {
+    "position": [200, 200],
+    "angle": 90
+  },
+
+  "detectors": {
+    "next_zone_1": {
+      "rect": [0, 750, 400, 50],
+      "action": "switch_zone",
+      "zone": "abyss_1",
+      "player_new_position": [200, 200],
+      "player_new_angle": -90
+    }
+  },
+
+  "entities": {
+  }
+}
