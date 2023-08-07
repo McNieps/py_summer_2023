@@ -18,7 +18,7 @@ from game.objects.game.detector import Detector
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "abyss_4") -> None:
+                 map_name: str = "abyss_1") -> None:
 
         super().__init__(fps=120)
 
@@ -77,6 +77,7 @@ class World(BaseInstance):
 
     async def purge_world(self) -> None:
         self.scenes.clear()
+        self.event_handler.clear()
         self.detectors.clear()
         self.window.fill(Resource.data["color"]["list"][-1])
 
@@ -96,7 +97,7 @@ class World(BaseInstance):
                                                                TileHelper.get_collision_tile_id())
 
     async def create_entities(self) -> None:
-        self.player = Player(self.entity_scene, (850, 20))  # (1300, 1300))   # (850, 20))
+        self.player = Player(self.entity_scene, (1300, 1300))   # (850, 20))
 
         player_spotlight = PlayerSpotlight(self.player.position,
                                            self.collision_map,

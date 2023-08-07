@@ -31,4 +31,3 @@ class Rock(Entity):
         position.create_circle_shape(radius_dict[rock_type])
 
         super().__init__(position, sprite)
-        print(self.sprite)
