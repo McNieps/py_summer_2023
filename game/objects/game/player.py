@@ -21,8 +21,10 @@ class Player(Entity):
 
         position = PymunkPos(position=initial_pos, shape_collision_type=CollisionTypes.PLAYER)
         player_surface = Resource.image["game"]["submarine_1"]
-        # position.create_rect_shape(player_surface, density=50, radius=-1.5)
-        position.create_circle_shape(2, friction=0.2, density=50)
+
+        position.create_circle_shape(radius=Resource.data["objects"]["player"]["radius"],
+                                     friction=Resource.data["objects"]["player"]["friction"],
+                                     density=Resource.data["objects"]["player"]["density"])
 
         sprite = Sprite(player_surface, rendering_technique="rotated")
 
@@ -30,17 +32,22 @@ class Player(Entity):
 
         self.sprite_flipped = False
 
-        self.exploration_velocity = 3_500_000
-        self.chase_velocity = 5_000_000
+        # Gameplay related
+        self.integrity = Resource.data["objects"]["player"]["integrity"]
+
+        # Physics related
+        self.exploration_velocity = Resource.data["objects"]["player"]["exploration_thrust"]
+        self.chase_velocity = Resource.data["objects"]["player"]["chase_thrust"]
         self.velocity = self.exploration_velocity
-
         self.torque_mult = 0.5
-        self.boost_mult = 5
+        self.boost_mult = Resource.data["objects"]["player"]["boost_multiplier"]
 
+        # Particle related
         self.max_bubble_spawn_frequency = 200
         self.max_speed_max_frequency = 200
         self.bubble_last_spawn = time.time()
 
+        # Controls related
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
     def update(self,

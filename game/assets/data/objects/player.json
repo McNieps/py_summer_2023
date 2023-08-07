@@ -1,0 +1,9 @@
+{
+  "density": 50,
+  "friction": 0.2,
+  "radius": 2,
+  "exploration_thrust": 3500000,
+  "chase_thrust": 5000000,
+  "boost_multiplier": 2,
+  "integrity": 100
+}
