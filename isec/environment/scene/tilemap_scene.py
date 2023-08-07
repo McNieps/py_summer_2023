@@ -21,6 +21,7 @@ class TilemapScene(Scene):
         self.tileset = tileset
         self.tile_size = self.tileset[0].get_size()[0]
         self._inter_tile_distance = 0
+        self.map_size_pixels = self.tilemap_size[0]*self.tile_size, self.tilemap_size[1]*self.tile_size
 
         if not self._check_tileset_validity():
             raise ValueError("Invalid tileset")

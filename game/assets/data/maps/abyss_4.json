@@ -1,3 +1,38 @@
 {
+  "music": {
+    "track": null
+  },
 
+  "initial_condition": {
+    "position": [200, 200],
+    "angle": 0
+  },
+
+  "detectors": {
+    "next_zone_1": {
+      "rect": [1550, 1200, 50, 200],
+      "action": "switch_zone",
+      "map_name": "abyss_2",
+      "spawn_position": [200, 200],
+      "spawn_angle": 90
+    }
+  },
+
+  "entities": {
+    "vent": {
+      "type": "vent",
+      "position": [876, 119],
+      "angle": 90,
+      "strength": 10000,
+      "pattern": [9000000, 0],
+      "offset": 50
+    },
+
+    "rock_small_1": {
+      "type": "rock_big",
+      "position": [850, 55],
+      "speed": [0, 0],
+      "angle": -90
+    }
+  }
 }

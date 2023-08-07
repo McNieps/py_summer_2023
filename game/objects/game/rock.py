@@ -14,13 +14,14 @@ class Rock(Entity):
                  speed: tuple[float, float] = None,
                  angle: float = 0) -> None:
 
-        rock_surface = Resource.image["game"][f"{rock_type}_rock"]
+        rock_surface = Resource.image["game"][f"rock_{rock_type}"]
         sprite = Sprite(rock_surface, rendering_technique="cached")
 
         position = PymunkPos(position=position,
                              speed=speed,
                              a=angle,
-                             shape_collision_type=CollisionTypes.ROCK)
+                             shape_collision_type=CollisionTypes.ROCK,
+                             base_shape_density=100)
 
         radius_dict = {"tiny": 0.5,
                        "small": 0.75,
@@ -30,3 +31,4 @@ class Rock(Entity):
         position.create_circle_shape(radius_dict[rock_type])
 
         super().__init__(position, sprite)
+        print(self.sprite)

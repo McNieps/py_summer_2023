@@ -14,4 +14,6 @@ class Vent(Entity):
 
         position = Pos(position=position,
                        a=angle)
-        sprite = Resource.image["game"]["vent"]
+        sprite = Sprite(Resource.image["game"]["vent"], rendering_technique="cached")
+
+        super().__init__(position, sprite)

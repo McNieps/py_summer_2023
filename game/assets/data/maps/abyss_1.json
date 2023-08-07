@@ -1,7 +1,7 @@
 {
   "music": {
     "track": "menu",
-    "volume": 0.5
+    "volume": 0.75
   },
 
   "initial_condition": {
@@ -20,21 +20,5 @@
   },
 
   "entities": {
-    "vent": {
-      "type": "vent",
-      "position": [500, 500],
-      "angle": -90,
-      "strength": 10000,
-      "pattern": [9000000, 0],
-      "offset": 50
-    },
-
-    "rock_small": {
-      "type": "rock_small",
-      "position": [200, 200],
-      "speed": [0, 0],
-      "angle": -90
-    }
   }
-
 }

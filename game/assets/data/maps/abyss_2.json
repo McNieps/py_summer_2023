@@ -1,3 +1,24 @@
 {
+  "music": {
+    "track": "menu",
+    "volume": 0.5
+  },
 
+  "initial_condition": {
+    "position": [200, 200],
+    "angle": 0
+  },
+
+  "detectors": {
+    "next_zone_1": {
+      "rect": [0, 0, 500, 500],
+      "action": "switch_zone",
+      "zone": "abyss_3",
+      "player_new_position": [200, 200],
+      "player_new_angle": 90
+    }
+  },
+
+  "entities": {
+  }
 }
