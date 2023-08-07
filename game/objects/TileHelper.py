@@ -29,7 +29,6 @@ class TileHelper:
 
     @classmethod
     def _load(cls) -> None:
-        print("Loading tile helper...")
         for j in range(len(cls._collision_tile_matrix)):
             for i in range(len(cls._collision_tile_matrix[j])):
                 if cls._collision_tile_matrix[j][i]:

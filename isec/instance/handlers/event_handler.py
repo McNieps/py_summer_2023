@@ -19,6 +19,67 @@ class EventHandler:
 
         self._quit_callbacks: list[typing.Callable] = []
 
+    def remove_key_binding(self,
+                                 key: int) -> None:
+        """Removes all callbacks from the key."""
+
+        if key in self._keypressed_callbacks:
+            self._keypressed_callbacks.pop(key)
+        if key in self._keydown_callbacks:
+            self._keydown_callbacks.pop(key)
+        if key in self._keyup_callbacks:
+            self._keyup_callbacks.pop(key)
+
+    def remove_button_binding(self,
+                                    button: int) -> None:
+        """Removes all callbacks from the button."""
+
+        if button in self._buttonpressed_callbacks:
+            self._buttonpressed_callbacks.pop(button)
+        if button in self._buttondown_callbacks:
+            self._buttondown_callbacks.pop(button)
+        if button in self._buttonup_callbacks:
+            self._buttonup_callbacks.pop(button)
+
+    def remove_callback(self,
+                              callback: typing.Callable) -> None:
+        """Removes all callbacks from the callback."""
+
+        for key in self._keypressed_callbacks:
+            while callback in self._keypressed_callbacks[key]:
+                self._keypressed_callbacks[key].remove(callback)
+        for key in self._keydown_callbacks:
+            while callback in self._keydown_callbacks[key]:
+                self._keydown_callbacks[key].remove(callback)
+        for key in self._keyup_callbacks:
+            while callback in self._keyup_callbacks[key]:
+                self._keyup_callbacks[key].remove(callback)
+        for button in self._buttonpressed_callbacks:
+            while callback in self._buttonpressed_callbacks[button]:
+                self._buttonpressed_callbacks[button].remove(callback)
+        for button in self._buttondown_callbacks:
+            while callback in self._buttondown_callbacks[button]:
+                self._buttondown_callbacks[button].remove(callback)
+        for button in self._buttonup_callbacks:
+            while callback in self._buttonup_callbacks[button]:
+                self._buttonup_callbacks[button].remove(callback)
+        while callback in self._mouse_move_callbacks:
+            self._mouse_move_callbacks.remove(callback)
+        while callback in self._quit_callbacks:
+            self._quit_callbacks.remove(callback)
+
+    def clear(self) -> None:
+        """Removes all callbacks."""
+
+        self._keypressed_callbacks = {}
+        self._keydown_callbacks = {}
+        self._keyup_callbacks = {}
+        self._buttonpressed_callbacks = {}
+        self._buttondown_callbacks = {}
+        self._buttonup_callbacks = {}
+        self._mouse_move_callbacks = []
+        self._quit_callbacks = []
+
     def register_keypressed_callback(self,
                                      key: int,
                                      callback: typing.Callable) -> None:
