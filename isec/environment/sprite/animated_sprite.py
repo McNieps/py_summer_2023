@@ -31,7 +31,6 @@ class AnimatedSprite(Sprite):
         self._current_frame: int = 0
         self._current_duration: float = 0.0
 
-    # Create a new update methode that can handle when some frame animation is 0
     def update(self,
                delta: float) -> None:
 
