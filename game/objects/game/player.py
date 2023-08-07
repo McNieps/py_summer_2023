@@ -112,7 +112,7 @@ class Player(Entity):
 
         speed = input_vec * delta * self.velocity
         if -90 < difference < 90:
-            mult = 1+math.cos(math.radians(difference))
+            mult = 1+math.cos(math.radians(difference))**2
             if self.pressed["boost"]:
                 mult *= self.boost_mult
 
@@ -144,6 +144,11 @@ class Player(Entity):
             self.bubble_last_spawn += bubble_spawn_period
             self.linked_scene.add_entities(Bubble(tuple(self.position.position-2*self.position.body.rotation_vector),
                                                   self.position.body.rotation_vector.angle_degrees))
+
+    def handle_impact(self,
+                      kinetic_energy: float) -> None:
+
+        print(kinetic_energy)
 
     async def up(self) -> None:
         self.pressed["up"] = True

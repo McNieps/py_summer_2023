@@ -17,3 +17,12 @@ class Scene:
         self.camera = camera
         self.surface = surface
         self.rect = self.surface.get_rect()
+
+    def update(self,
+               delta: float) -> None:
+        pass
+
+    def render(self,
+               camera: Camera = None) -> None:
+
+        pass

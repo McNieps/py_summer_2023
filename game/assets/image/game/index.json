@@ -1,0 +1,22 @@
+{
+  "rock_big": {
+    "cached": true,
+    "cache_size": 45
+  },
+  "rock_medium": {
+    "cached": true,
+    "cache_size": 16
+  },
+  "rock_small": {
+    "cached": true,
+    "cache_size": 4
+  },
+  "rock_tiny": {
+    "cached": true,
+    "cache_size": 1
+  },
+  "vent": {
+    "cached": true,
+    "cache_size": 45
+  }
+}

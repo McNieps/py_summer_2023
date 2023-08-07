@@ -35,9 +35,9 @@ class PlayButton(Button):
             self.sprite.current_frame = 1
 
         async def up_callback() -> None:
+            Resource.sound["effect"]["click_2"].play()
             x = World()
             await x.execute()
-            Resource.sound["effect"]["click_2"].play()
 
         super().__init__(linked_instance,
                          linked_scene,
