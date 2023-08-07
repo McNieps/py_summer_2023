@@ -1,15 +1,11 @@
 import pygame
-import pymunk
-import time
 
 from isec.app import Resource
 from isec.instance import BaseInstance, LoopHandler
 from isec.environment import TilemapScene, EntityScene
-from isec.environment.base import Entity, Pos, Sprite
-from isec.environment.sprite import PymunkSprite
-from isec.environment.position import PymunkPos
 from isec.environment.tile_utils import TileCollision
 
+from game.objects.TileHelper import TileHelper
 from game.objects.game.player import Player
 from game.objects.game.player_spotlight import PlayerSpotlight
 from game.objects.game.collision_types import CollisionTypes
@@ -22,19 +18,15 @@ class World(BaseInstance):
         super().__init__(fps=120)
 
         # Tilemap related
-        self.tile_size = 8
         self.tile_map = Resource.data["maps"][map_name]
-        self.tile_set = TilemapScene.create_tileset(Resource.image["tileset"]["tileset_1"],
-                                                    self.tile_size,
-                                                    0,
-                                                    1)
 
         self.collision_map = TilemapScene.create_collision_map(self.tile_map,
-                                                               [i+15*j for i in range(6) for j in range(10)])
+                                                               TileHelper.get_collision_tile_id())
 
+        print(TileHelper.get_tile_set())
         # Creation of scenes
         self.tilemap_scene = TilemapScene(self.tile_map,
-                                          self.tile_set)
+                                          TileHelper.get_tile_set())
 
         self.entity_scene = EntityScene(120,
                                         camera=self.tilemap_scene.camera)
@@ -42,22 +34,23 @@ class World(BaseInstance):
         self.entity_scene.space.damping = 0.2
 
         # Creation of entities
-        self.player = Player(self.entity_scene)
+        self.player = Player(self.entity_scene, (850, 20))
 
         player_spotlight = PlayerSpotlight(self.player.position,
                                            self.collision_map,
-                                           self.tile_size)
+                                           TileHelper.tile_size)
 
         tile_collision = TileCollision(self.collision_map,
-                                       self.tile_size,
-                                       collision_type=CollisionTypes.WALL)
+                                       TileHelper.tile_size,
+                                       collision_type=CollisionTypes.WALL,
+                                       wall_friction=0.2)
 
         self.entity_scene.add_entities(self.player, tile_collision, player_spotlight)
 
         # Collision callbacks
         t = self.entity_scene.space.add_collision_handler(CollisionTypes.PLAYER, CollisionTypes.WALL)
 
-        def post_step(arbiter, space, data):
+        def post_step(arbiter, _space, _data):
             if arbiter.is_first_contact:
                 print(arbiter.total_ke)
             return True

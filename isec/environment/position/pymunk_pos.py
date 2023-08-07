@@ -96,6 +96,16 @@ class PymunkPos(Pos):
 
         return shape
 
+    def create_circle_shape(self,
+                            radius: float,
+                            density: float = None,
+                            friction: float = None,
+                            elasticity: float = None) -> pymunk.Shape:
+
+        shape = pymunk.Circle(self.body, radius)
+        self.set_shape_characteristics(shape, density, friction, elasticity)
+        self.shapes.append(shape)
+
     def create_surface_shape(self,
                              surface: pygame.Surface,
                              scale: float = 1,

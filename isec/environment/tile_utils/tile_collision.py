@@ -45,6 +45,6 @@ class TileCollision(Entity):
 
                     tile_shape = pymunk.Poly(position.body,
                                              vertices,
-                                             radius=-0.5)
+                                             radius=0)
                     position.set_shape_characteristics(tile_shape)
                     position.shapes.append(tile_shape)
