@@ -29,5 +29,11 @@
   },
 
   "entities": {
+    "blob": {
+      "type": "blob",
+      "position": 1955,
+      "speed": 30,
+      "direction": [0, -1]
+    }
   }
 }

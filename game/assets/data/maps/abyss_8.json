@@ -31,8 +31,8 @@
   "entities": {
     "blob": {
       "type": "blob",
-      "position": 1900,
-      "speed": 167,
+      "position": 1955,
+      "speed": 166,
       "direction": [0, -1]
     }
   }
