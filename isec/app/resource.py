@@ -230,7 +230,6 @@ class Resource:
             data_dict = cls.data["sound"]
 
         for key in sound_dict:
-            print(f"{key=}")
             if isinstance(sound_dict[key], dict):
                 cls.set_volume(master_volume,
                                sound_dict[key],
