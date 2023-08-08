@@ -96,8 +96,6 @@ class World(BaseInstance):
             self.transition = Transition(map_name)
             self.gui_scene.add_entities(self.transition)
 
-        print(f"Attempting to change world to {self.transition.map_name}")
-
         if self.transition.ready_to_transition and not self.transition.transitioned:
             self.transition.transitioned = True
             await self.load_world(self.transition.map_name)
@@ -228,14 +226,15 @@ class World(BaseInstance):
             return
 
         if track_volume is None:
-            track_volume = self.map_dict["music"]["volume"] * Resource.data["engine"]["resource"]["sound"]["volume"]
+            track_volume = self.map_dict["music"]["volume"]
 
         if track_name != self.current_track:
             track_path = f"{Resource.project_assets_directory}sound/music/{track_name}.ogg"
             self.current_track = track_name
             pygame.mixer.music.load(track_path)
             pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(track_volume)
+
+        pygame.mixer.music.set_volume(track_volume * Resource.data["engine"]["resource"]["sound"]["volume"])
 
     async def create_detectors(self) -> None:
         for detector_dict in self.map_dict["detectors"].values():
