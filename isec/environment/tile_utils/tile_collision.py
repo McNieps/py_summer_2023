@@ -25,10 +25,8 @@ class TileCollision(Entity):
 
         self._build_collision_shape(position)
 
-        if show_collision:
-            sprite = PymunkSprite(position)
-        else:
-            sprite = Sprite(pygame.Surface((1, 1), pygame.SRCALPHA))
+        sprite = PymunkSprite(position) if show_collision else Sprite(pygame.Surface((1, 1),
+                                                                                     pygame.SRCALPHA))
 
         super().__init__(position=position, sprite=sprite)
 

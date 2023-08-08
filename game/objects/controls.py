@@ -8,11 +8,6 @@ class Controls:
     RIGHT = pygame.K_d
     BOOST = pygame.K_LSHIFT
     PAUSE = pygame.K_ESCAPE
-    DEBUG = pygame.K_F3
-    DEBUG_COLLISION = pygame.K_F4
-    DEBUG_PHYSICS = pygame.K_F5
-    DEBUG_FPS = pygame.K_F6
-    DEBUG_CAMERA = pygame.K_F7
 
     KEY_NAMES = {vars(pygame)[key]: key for key in vars(pygame) if key.startswith("K_")}
 
@@ -46,7 +41,12 @@ class Controls:
 
     @classmethod
     def get_key(cls, action):
+        action = action.upper()
         if action not in vars(cls):
             raise ValueError("Action not found")
 
         return getattr(cls, action)
+
+    @classmethod
+    def get_key_name_from_action(cls, action: str) -> str:
+        return cls.get_key_name(cls.get_key(action))

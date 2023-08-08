@@ -20,7 +20,7 @@ class Sprite:
     def __init__(self,
                  surface: pygame.Surface,
                  rendering_technique: RenderingTechniques.TYPING = "static",
-                 blit_flag: int = 0,) -> None:
+                 blit_flag: int = 0) -> None:
 
         self.surface = surface
         self.rect = self.surface.get_rect()

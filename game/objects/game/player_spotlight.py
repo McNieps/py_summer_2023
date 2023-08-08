@@ -65,15 +65,8 @@ class PlayerSpotlight(Entity):
             vec_start_cell = pygame.Vector2(math.floor(vec_ray_start[0]),
                                             math.floor(vec_ray_start[1]))
 
-            if vec_ray_dir[0] == 0:
-                dir_y_over_x = float('+inf')
-            else:
-                dir_y_over_x = vec_ray_dir[1] / vec_ray_dir[0]
-
-            if vec_ray_dir[1] == 0:
-                dir_x_over_y = float('+inf')
-            else:
-                dir_x_over_y = vec_ray_dir[0] / vec_ray_dir[1]
+            dir_y_over_x = float('+inf') if vec_ray_dir[0] == 0 else vec_ray_dir[1] / vec_ray_dir[0]
+            dir_x_over_y = float('+inf') if vec_ray_dir[1] == 0 else vec_ray_dir[0] / vec_ray_dir[1]
 
             vec_ray_unit_step_size = pygame.Vector2(math.sqrt(1 + dir_y_over_x ** 2), math.sqrt(1 + dir_x_over_y ** 2))
             vec_map_check = vec_start_cell.copy()

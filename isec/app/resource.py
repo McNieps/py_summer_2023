@@ -190,8 +190,7 @@ class Resource:
                     current_data_dict |= sound_dict
                     continue
 
-                else:
-                    raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
+                raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
 
     @classmethod
     def _cache(cls,
@@ -223,7 +222,7 @@ class Resource:
                    data_dict: dict = None) -> None:
 
         if master_volume is None:
-            master_volume = cls.data["engine"]["resource"]["sound"]["volume"]
+            master_volume = cls.data["engine"]["resource"]["sound"]["master_volume"]
 
         if sound_dict is None:
             sound_dict = cls.sound

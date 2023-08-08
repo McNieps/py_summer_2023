@@ -8,7 +8,7 @@ class PymunkSprite(Sprite):
     def __init__(self,
                  pymunk_pos: Pos,
                  rendering_technique: RenderingTechniques.TYPING = "static",
-                 blit_flag: int = 0,) -> None:
+                 blit_flag: int = 0) -> None:
 
         if pymunk_pos.body is None:
             raise ValueError("Position must be of type PymunkPos")

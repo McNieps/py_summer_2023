@@ -165,7 +165,10 @@ class Player(Entity):
             self.sprite.surface = pygame.transform.flip(self.sprite.surface, False, True)
 
     def spawn_bubble(self, delta) -> None:
-        bubble_spawn_frequency = self.position.body.velocity.length / self.max_speed_max_frequency * self.max_bubble_spawn_frequency
+        bubble_spawn_frequency = (self.position.body.velocity.length
+                                  / self.max_speed_max_frequency
+                                  * self.max_bubble_spawn_frequency)
+
         if bubble_spawn_frequency < 0.05:
             return
 

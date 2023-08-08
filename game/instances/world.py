@@ -7,7 +7,7 @@ from isec.environment.base.scene import Scene
 from isec.environment.base import Entity
 from isec.environment.tile_utils import TileCollision
 
-from game.objects.TileHelper import TileHelper
+from game.objects.tile_helper import TileHelper
 from game.objects.game.player import Player
 from game.objects.game.player_spotlight import PlayerSpotlight
 from game.objects.game.collision_types import CollisionTypes
@@ -25,12 +25,11 @@ from game.objects.game.screen_filter import ScreenFilter
 
 
 class World(BaseInstance):
-    def __init__(self,
-                 map_name: str = "level_6") -> None:
+    map_name: str = "surface"
+
+    def __init__(self) -> None:
 
         super().__init__(fps=120)
-
-        self.map_name: str = map_name
         self.map_dict: dict = {}
 
         self.color = None
@@ -55,18 +54,17 @@ class World(BaseInstance):
         self.gui_scene.add_entities(self.screen_filter)
 
     async def setup(self):
-        await self.load_world(self.map_name)
+        await self.load_world(World.map_name)
 
     async def loop(self) -> None:
-        LoopHandler.fps_caption()
-
         self.window.fill(self.color)
 
-        for scene in self.scenes:
-            scene.update(self.delta)
+        if self.transition is None:
+            for scene in self.scenes:
+                scene.update(self.delta)
         self.gui_scene.update(self.delta)
 
-        if self.map_name in ["surface","surface_end"] and self.player.position.position[1] < 223:
+        if World.map_name in ["surface", "surface_end"] and self.player.position.position[1] < 223:
             force = tuple(pygame.Vector2(0, 200000).rotate(self.player.position.a))
             self.player.position.body.apply_force_at_local_point(force, (0, 0))
 
@@ -103,7 +101,7 @@ class World(BaseInstance):
     async def load_world(self,
                          map_name: str) -> None:
 
-        self.map_name = map_name
+        World.map_name = map_name
         self.map_dict = Resource.data["maps"][map_name]
 
         self.color = self.map_dict["graphics"]["color_id"]
@@ -130,7 +128,7 @@ class World(BaseInstance):
 
     async def create_scenes(self) -> None:
         self.entity_scene = EntityScene(fps=self.fps)
-        self.terrain_scene = TilemapScene(tilemap=Resource.data["maps"][f"{self.map_name}_terrain"],
+        self.terrain_scene = TilemapScene(tilemap=Resource.data["maps"][f"{World.map_name}_terrain"],
                                           tileset=TileHelper.get_tile_set(),
                                           camera=self.entity_scene.camera)
 
@@ -140,7 +138,7 @@ class World(BaseInstance):
         self.scenes.append(self.entity_scene)
 
     async def create_terrain(self) -> None:
-        self.collision_map = TilemapScene.create_collision_map(Resource.data["maps"][f"{self.map_name}_terrain"],
+        self.collision_map = TilemapScene.create_collision_map(Resource.data["maps"][f"{World.map_name}_terrain"],
                                                                TileHelper.get_collision_tile_id())
 
     async def create_entities(self) -> None:
@@ -154,7 +152,7 @@ class World(BaseInstance):
 
         additional_background_entities = []
         additional_foreground_entities = []
-        for map_entities_dict in Resource.data["maps"][self.map_name]["entities"].values():
+        for map_entities_dict in Resource.data["maps"][World.map_name]["entities"].values():
             is_background, entity = self.create_entity_from_dict(map_entities_dict)
             if is_background:
                 additional_background_entities.append(entity)
@@ -234,7 +232,9 @@ class World(BaseInstance):
             pygame.mixer.music.load(track_path)
             pygame.mixer.music.play(-1)
 
-        pygame.mixer.music.set_volume(track_volume * Resource.data["engine"]["resource"]["sound"]["volume"])
+        pygame.mixer.music.set_volume(track_volume *
+                                      Resource.data["engine"]["resource"]["sound"]["master_volume"] *
+                                      Resource.data["engine"]["resource"]["sound"]["music_volume"])
 
     async def create_detectors(self) -> None:
         for detector_dict in self.map_dict["detectors"].values():
@@ -291,8 +291,7 @@ class World(BaseInstance):
         if entity_type == "artifact":
             return False, Artifact()
 
-        else:
-            raise ValueError(f"Unknown entity type {entity_type}")
+        raise ValueError(f"Unknown entity type {entity_type}")
 
     def sync_camera_with_player(self) -> None:
         camera_x = min(max(0, self.player.position.position[0]-200), self.terrain_scene.map_size_pixels[0] - 400)

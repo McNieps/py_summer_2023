@@ -30,12 +30,10 @@ class Blob(Entity):
                 monster_surfaces[i] = pygame.transform.rotate(monster_surfaces[i], -90)
 
         if direction[0] < 0:
-            print("flipped x")
             for i in range(len(monster_surfaces)):
                 monster_surfaces[i] = pygame.transform.flip(monster_surfaces[i], True, False)
 
         if direction[1] < 0:
-            print("flipped y")
             for i in range(len(monster_surfaces)):
                 monster_surfaces[i] = pygame.transform.flip(monster_surfaces[i], False, True)
 

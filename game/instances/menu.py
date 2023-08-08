@@ -37,7 +37,7 @@ class Menu(BaseInstance):
 if __name__ == '__main__':
     import asyncio
 
-    from isec.app import App, Resource
+    from isec.app import App
 
 
     async def main():

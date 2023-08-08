@@ -17,8 +17,6 @@ class ScreenFilter(Entity):
                       enabled: bool = True,
                       brightness: int = 0) -> None:
 
-        print(brightness)
-
         self.enabled = enabled
         self.brightness = brightness
 
@@ -28,13 +26,9 @@ class ScreenFilter(Entity):
 
         surf = Resource.image["game"]["shadow"].copy()
 
-        if self.brightness < 0:
-            flag = pygame.BLEND_RGB_SUB
-        else:
-            flag = pygame.BLEND_RGB_ADD
+        flag = pygame.BLEND_RGB_SUB if self.brightness < 0 else pygame.BLEND_RGB_ADD
 
         brightness_abs_value = abs(self.brightness)
-        print(brightness_abs_value)
         brightness_surf = pygame.Surface((400, 300))
         brightness_surf.fill((brightness_abs_value, brightness_abs_value, brightness_abs_value))
         surf.blit(brightness_surf, (0, 0), special_flags=flag)

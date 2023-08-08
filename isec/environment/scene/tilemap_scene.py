@@ -114,8 +114,7 @@ class TilemapScene(Scene):
                     collision_map[y][x] = True
                     continue
 
-                tile_id = tilemap[y][x]
-                if tile_id == cls.EMPTY_TILE or tile_id not in collision_tile:
+                if tile == cls.EMPTY_TILE or tile not in collision_tile:
                     collision_map[y][x] = False
                     continue
 
