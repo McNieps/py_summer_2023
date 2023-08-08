@@ -24,7 +24,7 @@ from game.objects.game.artifact import Artifact
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "abyss_1") -> None:
+                 map_name: str = "surface") -> None:
 
         super().__init__(fps=120)
 

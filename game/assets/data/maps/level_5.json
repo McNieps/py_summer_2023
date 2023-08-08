@@ -1,7 +1,7 @@
 {
   "music": {
-    "track": "ruin_1",
-    "volume": 0.25
+    "track": "chase_2",
+    "volume": 1
   },
 
   "graphics": {
@@ -14,16 +14,16 @@
   },
 
   "initial_condition": {
-    "position": [25, 144],
+    "position": [1570, 645],
     "angle": 0
   },
 
   "detectors": {
     "next_zone_1": {
-      "rect": [1530, 1250, 70, 150],
+      "rect": [1575, 200, 25, 300],
       "action": "switch_zone",
       "map_name": "level_6",
-      "player_new_position": [25, 1550],
+      "player_new_position": [5, 616],
       "player_new_angle": 90
     }
   },

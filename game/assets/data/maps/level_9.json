@@ -14,16 +14,16 @@
   },
 
   "initial_condition": {
-    "position": [5, 616],
+    "position": [1570, 192],
     "angle": 90
   },
 
   "detectors": {
     "next_zone_1": {
-      "rect": [0, 308, 25, 300],
+      "rect": [0, 64, 25, 240],
       "action": "switch_zone",
-      "map_name": "level_7",
-      "player_new_position": [1570, 720],
+      "map_name": "abyss_5",
+      "player_new_position": [1570, 1320],
       "player_new_angle": 90
     }
   },

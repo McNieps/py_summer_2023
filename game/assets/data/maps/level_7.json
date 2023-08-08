@@ -1,6 +1,6 @@
 {
   "music": {
-    "track": "chase_2",
+    "track": "chase_1",
     "volume": 0.25
   },
 
@@ -14,16 +14,16 @@
   },
 
   "initial_condition": {
-    "position": [5, 616],
+    "position": [1570, 720],
     "angle": 90
   },
 
   "detectors": {
     "next_zone_1": {
-      "rect": [0, 308, 25, 300],
+      "rect": [0, 40, 25, 240],
       "action": "switch_zone",
-      "map_name": "level_7",
-      "player_new_position": [1570, 720],
+      "map_name": "level_8",
+      "player_new_position": [1595, 590],
       "player_new_angle": 90
     }
   },
