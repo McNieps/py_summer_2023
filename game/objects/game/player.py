@@ -1,4 +1,5 @@
 import pygame
+import random
 import math
 import time
 
@@ -33,7 +34,7 @@ class Player(Entity):
         self.sprite_flipped = False
 
         # Gameplay related
-        self.integrity = Resource.data["objects"]["player"]["max_integrity"]
+        self.life = Resource.data["objects"]["player"]["life"]
 
         # Physics related
         self.exploration_velocity = Resource.data["objects"]["player"]["exploration_thrust"]
@@ -180,7 +181,23 @@ class Player(Entity):
     def handle_impact(self,
                       kinetic_energy: float) -> None:
 
-        print(kinetic_energy)
+        light_hit = Resource.data["objects"]["player"]["light_hit_threshold"]
+        if kinetic_energy < light_hit:
+            return
+
+        medium_hit = Resource.data["objects"]["player"]["medium_hit_threshold"]
+        if kinetic_energy < medium_hit:
+            Resource.sound["game"][f"light_hit_{random.randint(1, 2)}"].play()
+            self.life -= Resource.data["objects"]["player"]["light_hit_damage"]
+
+        heavy_hit = Resource.data["objects"]["player"]["heavy_hit_threshold"]
+        if kinetic_energy < heavy_hit:
+            Resource.sound["game"][f"medium_hit_{random.randint(1, 2)}"].play()
+            self.life -= Resource.data["objects"]["player"]["medium_hit_damage"]
+
+        else:
+            Resource.sound["game"][f"heavy_hit_{random.randint(1, 2)}"].play()
+            self.life -= Resource.data["objects"]["player"]["heavy_hit_damage"]
 
     async def up(self) -> None:
         self.pressed["up"] = True
