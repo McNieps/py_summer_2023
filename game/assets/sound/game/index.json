@@ -5,9 +5,9 @@
   "sub_fast_boost": 0.5,
   "light_hit_1": 0.5,
   "light_hit_2": 0.5,
-  "medium_hit_1": 0.5,
-  "medium_hit_2": 0.5,
-  "big_hit_1": 0.5,
-  "big_hit_2": 0.5,
+  "medium_hit_1": 0.75,
+  "medium_hit_2": 0.75,
+  "big_hit_1": 1,
+  "big_hit_2": 1,
   "monster": 0.5
 }

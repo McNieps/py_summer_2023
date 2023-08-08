@@ -10,7 +10,7 @@
   "light_hit_threshold": 1000000,
   "medium_hit_threshold": 5000000,
   "heavy_hit_threshold": 10000000,
-  "light_hit_damage": 1,
-  "medium_hit_damage": 5,
+  "light_hit_damage": 0,
+  "medium_hit_damage": 0,
   "heavy_hit_damage": 10
 }

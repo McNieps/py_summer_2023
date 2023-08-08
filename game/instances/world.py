@@ -25,7 +25,7 @@ from game.objects.game.screen_filter import ScreenFilter
 
 
 class World(BaseInstance):
-    map_name: str = "abyss_5"
+    map_name: str = "level_4"
 
     def __init__(self) -> None:
 
@@ -208,7 +208,7 @@ class World(BaseInstance):
         self.player.add_control_callbacks(linked_instance=self)
         self.event_handler.register_buttonpressed_callback(2, self.move_camera)
         self.event_handler.register_keyup_callback(pygame.K_ESCAPE, self.quit_instance)
-        self.event_handler.register_keydown_callback(pygame.K_LALT, self.swap_velocity)
+        self.event_handler.register_keydown_callback(pygame.K_EXCLAIM, self.swap_velocity)
         self.event_handler.register_buttondown_callback(1, self.print_location)
         self.event_handler.register_quit_callback(LoopHandler.stop_game)
 

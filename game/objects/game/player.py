@@ -14,6 +14,8 @@ from game.objects.game.collision_types import CollisionTypes
 
 
 class Player(Entity):
+    velocity_type: str = "exploration"
+
     def __init__(self,
                  linked_scene: EntityScene,
                  initial_pos: tuple[int, int] = (100, 100)) -> None:
@@ -39,7 +41,7 @@ class Player(Entity):
         # Physics related
         self.exploration_velocity = Resource.data["objects"]["player"]["exploration_thrust"]
         self.chase_velocity = Resource.data["objects"]["player"]["chase_thrust"]
-        self.velocity = self.exploration_velocity
+        self.velocity = Resource.data["objects"]["player"][f"{Player.velocity_type}_thrust"]
         self.torque_mult = 0.5
         self.boost_mult = Resource.data["objects"]["player"]["boost_multiplier"]
 
@@ -223,3 +225,8 @@ class Player(Entity):
         linked_instance.event_handler.register_keypressed_callback(Controls.LEFT, self.left)
         linked_instance.event_handler.register_keypressed_callback(Controls.RIGHT, self.right)
         linked_instance.event_handler.register_keypressed_callback(Controls.BOOST, self.boost)
+
+    def change_speed(self,
+                     speed_type: str) -> None:
+        Player.velocity_type = speed_type
+        self.velocity = Resource.data["objects"]["player"][f"{Player.velocity_type}_thrust"]

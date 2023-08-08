@@ -1,7 +1,7 @@
 import pygame
 
 from isec.app import Resource
-from isec.instance import BaseInstance
+from isec.instance import BaseInstance, LoopHandler
 from isec.environment import EntityScene
 
 from game.objects.menu.settings_buttons import ControlsButton, SoundsButton
@@ -19,7 +19,12 @@ class Settings(BaseInstance):
         blur_window = pygame.transform.box_blur(self.window, 1)
         self.window.blit(blur_window, (0, 0))
 
+        self.event_handler.register_keydown_callback(pygame.K_ESCAPE, self.quit_instance)
+
     async def loop(self):
         self.window.blit(Resource.image["menu"]["settings_board"], (50, 37))
         self.scene.update(self.delta)
         self.scene.render()
+
+    async def quit_instance(self) -> None:
+        LoopHandler.stop_instance(self)

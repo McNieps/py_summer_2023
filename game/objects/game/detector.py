@@ -2,14 +2,16 @@ import pygame
 
 from isec.environment.scene import EntityScene
 
+from game.objects.game.player import Player
+
 
 class Detector:
     def __init__(self,
                  linked_world,
-                 detector_dict: dict[str, str]) -> None:
+                 detector_dict: dict[str, ...]) -> None:
 
         self.linked_world = linked_world
-        self.detector_dict: dict[str, str] = detector_dict
+        self.detector_dict: dict[str, ...] = detector_dict
         self.used = False
         self.rect = pygame.Rect(*detector_dict["rect"])
 
@@ -32,8 +34,9 @@ class Detector:
         elif action == "switch_music":
             await self.linked_world.set_music(self.detector_dict["track"], self.detector_dict["volume"])
 
-        elif action == "create_detector":
-            raise NotImplementedError("Create detector action not implemented yet")
+        elif action == "add_detector":
+            new_detector = Detector(self.linked_world, self.detector_dict["detector_dict"])
+            self.linked_world.detectors.append(new_detector)
 
         elif action == "remove_entity":
             for scene in self.linked_world.scenes:
@@ -44,6 +47,9 @@ class Detector:
 
         elif action == "add_entity":
             await self.linked_world.add_entity_dict(self.detector_dict["entity_dict"])
+
+        elif action == "change_player_speed":
+            self.linked_world.player.change_speed(self.detector_dict["speed"])
 
         else:
             raise ValueError(f"Invalid detector action: {self.detector_dict['action']}")
