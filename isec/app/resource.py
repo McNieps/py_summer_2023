@@ -49,6 +49,7 @@ class Resource:
             cls._load_sound(cls.project_assets_directory)
 
         cls._cache()
+        cls.set_volume()
 
     @classmethod
     def _get_default_assets_directory(cls):
@@ -99,7 +100,7 @@ class Resource:
 
     @classmethod
     def _load_csv(cls,
-                    file_path: PathLike) -> list[list[int]]:
+                  file_path: PathLike) -> list[list[int]]:
 
         with open(file_path) as file:
             return [list(map(int, rec)) for rec in csv.reader(file, delimiter=',')]
@@ -180,6 +181,14 @@ class Resource:
 
                 if any(elem.name.endswith(ext) for ext in [".wav", ".mp3", ".ogg"]):
                     current_sound_dict[key_name] = pygame.mixer.Sound(assets_path + elem.name)
+                    continue
+
+                if elem.name == "index.json":
+                    with open(assets_path + elem.name) as index_sound:
+                        sound_dict = json.load(index_sound)
+
+                    current_data_dict |= sound_dict
+                    continue
 
                 else:
                     raise InvalidFileFormatError(f"{elem.name.split('.')[-1]} is not a supported data file format")
@@ -206,6 +215,30 @@ class Resource:
 
                 if "cached" in data_dict[image_key] and data_dict[image_key]["cached"] is True:
                     surf_dict[image_key] = cls._cache_image(surf_dict[image_key], data_dict[image_key])
+
+    @classmethod
+    def set_volume(cls,
+                   master_volume: float = None,
+                   sound_dict: dict = None,
+                   data_dict: dict = None) -> None:
+
+        if master_volume is None:
+            master_volume = cls.data["engine"]["resource"]["sound"]["default_volume"]
+
+        if sound_dict is None:
+            sound_dict = cls.sound
+            data_dict = cls.data["sound"]
+
+        for key in sound_dict:
+            print(f"{key=}")
+            if isinstance(sound_dict[key], dict):
+                cls.set_volume(master_volume,
+                               sound_dict[key],
+                               data_dict[key])
+                continue
+
+            individual_sound_volume = data_dict[key] if key in data_dict else 1
+            sound_dict[key].set_volume(master_volume*individual_sound_volume)
 
     @classmethod
     def _cache_image(cls,

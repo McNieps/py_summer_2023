@@ -97,7 +97,7 @@ class World(BaseInstance):
         await self.set_music()
 
     async def purge_world(self) -> None:
-        pygame.mixer.stop()
+        pygame.mixer.fadeout(100)
         self.scenes.clear()
         self.event_handler.clear()
         self.detectors.clear()

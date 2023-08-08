@@ -33,7 +33,7 @@ class Player(Entity):
         self.sprite_flipped = False
 
         # Gameplay related
-        self.integrity = Resource.data["objects"]["player"]["integrity"]
+        self.integrity = Resource.data["objects"]["player"]["max_integrity"]
 
         # Physics related
         self.exploration_velocity = Resource.data["objects"]["player"]["exploration_thrust"]
