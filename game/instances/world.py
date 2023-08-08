@@ -54,7 +54,7 @@ class World(BaseInstance):
         for scene in self.scenes:
             scene.update(self.delta)
 
-        if self.map_name == "surface" and self.player.position.position[1] < 225:
+        if self.map_name == "surface" and self.player.position.position[1] < 223:
             force = tuple(pygame.Vector2(0, 200000).rotate(self.player.position.a))
             self.player.position.body.apply_force_at_local_point(force, (0, 0))
 
