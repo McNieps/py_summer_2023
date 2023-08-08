@@ -25,7 +25,7 @@ from game.objects.game.screen_filter import ScreenFilter
 
 
 class World(BaseInstance):
-    map_name: str = "abyss_6"
+    map_name: str = "surface"
 
     def __init__(self) -> None:
 
@@ -77,12 +77,17 @@ class World(BaseInstance):
             scene.render()
         self.gui_scene.render()
 
+        if self.player.dead and self.transition is None:
+            await self.change_world(World.map_name)
+
         if self.transition is not None:
             if self.transition.done:
                 self.transition = None
                 self.gui_scene.remove_entities_by_name("Transition")
             else:
                 await self.change_world()
+
+
 
     async def finish(self):
         pygame.mixer.stop()
@@ -208,7 +213,7 @@ class World(BaseInstance):
         self.player.add_control_callbacks(linked_instance=self)
         self.event_handler.register_buttonpressed_callback(2, self.move_camera)
         self.event_handler.register_keyup_callback(pygame.K_ESCAPE, self.quit_instance)
-        self.event_handler.register_keydown_callback(pygame.K_LALT, self.swap_velocity)
+        self.event_handler.register_keydown_callback(pygame.K_EXCLAIM, self.swap_velocity)
         self.event_handler.register_buttondown_callback(1, self.print_location)
         self.event_handler.register_quit_callback(LoopHandler.stop_game)
 

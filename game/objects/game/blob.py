@@ -16,7 +16,8 @@ class Blob(Entity):
         self.player = player
         self.direction = direction
         self.blocked = False
-
+        self.player_dead = False
+        self.player_dead_in = 1
         if all(direction):
             # raise error because no diagonal movement is allowed
             raise ValueError("No diagonal movement is allowed")
@@ -58,13 +59,23 @@ class Blob(Entity):
         distance_y = abs(self.player.position.position[1] - self.position.position[1])
         distance = (distance_x**2 + distance_y**2)**0.5
 
-        if distance > 120:
+        if self.player_dead:
+            self.player_dead_in -= delta
+            self.player.position.body.velocity = tuple(self.position.speed)
+            if self.player_dead_in <= 0:
+                self.player_dead = False
+                self.player.dead = True
+
+        elif distance > 220:
             self.animated_sprite.frame_durations = [0, 1, 0]
-        elif distance > 70:
+        elif distance > 170:
             self.animated_sprite.frame_durations = [1, 0, 0]
         else:
             self.animated_sprite.frame_durations = [0, 0, 1]
-
+            self.player.velocity *= 0
+            self.player.position.body.velocity = tuple(self.position.speed)
+            self.player_dead = True
+            Resource.sound["game"]["heavy_hit_1"].play()
     # kill dist = 70
         # open dist = 100
 

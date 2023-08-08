@@ -21,6 +21,7 @@ class Player(Entity):
                  initial_pos: tuple[int, int] = (100, 100)) -> None:
 
         self.linked_scene = linked_scene
+        self.dead = False
 
         position = PymunkPos(position=initial_pos, shape_collision_type=CollisionTypes.PLAYER)
         player_surface = Resource.image["game"]["submarine_1"]
