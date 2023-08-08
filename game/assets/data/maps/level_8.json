@@ -1,7 +1,7 @@
 {
   "music": {
     "track": "chase_1",
-    "volume": 0.25
+    "volume": 0.75
   },
 
   "graphics": {
@@ -32,7 +32,7 @@
     "bloby": {
       "type": "blob",
       "position":1200,
-      "speed": 20,
+      "speed": 22,
       "direction": [0, -1]
     }
   }

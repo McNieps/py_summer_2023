@@ -25,7 +25,7 @@ from game.objects.game.screen_filter import ScreenFilter
 
 
 class World(BaseInstance):
-    map_name: str = "surface"
+    map_name: str = "abyss_5"
 
     def __init__(self) -> None:
 
