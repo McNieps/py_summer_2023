@@ -12,6 +12,7 @@ class Menu(BaseInstance):
         super().__init__(Resource.data["instances"]["menu"]["fps"])
         pygame.mixer.music.load(Resource.project_assets_directory + "sound/music/menu.ogg")
         pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.25)
         self.scene = EntityScene(Resource.data["instances"]["menu"]["fps"])
 
         self.scene.add_entities(Sea(),

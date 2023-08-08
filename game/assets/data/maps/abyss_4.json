@@ -3,36 +3,30 @@
     "track": null
   },
 
+  "graphics": {
+    "color_id": 1,
+
+    "filter_enabled": true,
+    "filter_brightness": -64,
+
+    "spotlight_enabled": true
+  },
+
   "initial_condition": {
-    "position": [200, 200],
-    "angle": 0
+    "position": [850, 25],
+    "angle": 90
   },
 
   "detectors": {
     "next_zone_1": {
-      "rect": [1550, 1200, 50, 200],
+      "rect": [1530, 1250, 70, 150],
       "action": "switch_zone",
-      "map_name": "abyss_2",
-      "spawn_position": [200, 200],
-      "spawn_angle": 90
+      "map_name": "level_1",
+      "player_new_position": [25, 144],
+      "player_new_angle": 0
     }
   },
 
   "entities": {
-    "vent": {
-      "type": "vent",
-      "position": [876, 119],
-      "angle": 90,
-      "strength": 10000,
-      "pattern": [9000000, 0],
-      "offset": 50
-    },
-
-    "rock_small_1": {
-      "type": "rock_big",
-      "position": [850, 55],
-      "speed": [0, 0],
-      "angle": -90
-    }
   }
 }

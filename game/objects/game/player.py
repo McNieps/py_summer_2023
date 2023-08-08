@@ -50,6 +50,11 @@ class Player(Entity):
         # Controls related
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
+        # Audio related
+        self.sound_to_play = None
+        self.current_sound = None
+        self.current_channel = None
+
     def update(self,
                delta: float) -> None:
 
@@ -62,6 +67,7 @@ class Player(Entity):
         self.move_player(delta)
         self.spawn_bubble(delta)
         self.flip_sprite()
+        self.play_sound()
 
     def get_angle_cursor_player(self) -> float | None:
         player_screen_pos = pygame.Vector2(self.linked_scene.camera.get_offset_pos(self.position))
@@ -109,7 +115,10 @@ class Player(Entity):
 
         if input_vec.length() <= 0:
             self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
+            self.sound_to_play = None
             return
+
+        self.sound_to_play = "sub_slow" if self.velocity == self.exploration_velocity else "sub_fast"
 
         input_vec.normalize_ip()
         input_angle = (-input_vec.angle_to((1, 0))) % 360
@@ -121,6 +130,7 @@ class Player(Entity):
         if -90 < difference < 90:
             mult = 1+math.cos(math.radians(difference))**2
             if self.pressed["boost"]:
+                self.sound_to_play += "_boost"
                 mult *= self.boost_mult
 
             speed *= mult
@@ -129,6 +139,23 @@ class Player(Entity):
         self.position.body.apply_force_at_local_point(tuple(speed), (0, 0))
 
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
+
+    def play_sound(self) -> None:
+        print(self.sound_to_play)
+
+        if self.sound_to_play is None:
+            if self.current_sound is not None:
+                self.current_channel.fadeout(1000)
+                self.current_sound = None
+                self.current_channel = None
+            return
+
+        if self.current_sound != self.sound_to_play:
+            if self.current_channel is not None:
+                self.current_channel.fadeout(1000)
+
+            self.current_sound = self.sound_to_play
+            self.current_channel = Resource.sound["game"][self.sound_to_play].play(-1)
 
     def flip_sprite(self) -> None:
         if (90 < self.position.a < 270) and not self.sprite_flipped:

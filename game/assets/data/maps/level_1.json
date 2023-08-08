@@ -1,3 +1,33 @@
 {
+  "music": {
+    "track": "ruin_1",
+    "volume": 0.5
+  },
 
+  "graphics": {
+    "color_id": 1,
+
+    "filter_enabled": true,
+    "filter_brightness": 0,
+
+    "spotlight_enabled": true
+  },
+
+  "initial_condition": {
+    "position": [25, 144],
+    "angle": 0
+  },
+
+  "detectors": {
+    "next_zone_1": {
+      "rect": [200, 775, 400, 25],
+      "action": "switch_zone",
+      "map_name": "level_2",
+      "player_new_position": [100, 250],
+      "player_new_angle": 0
+    }
+  },
+
+  "entities": {
+  }
 }

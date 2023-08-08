@@ -43,6 +43,8 @@ class World(BaseInstance):
 
         self.detectors: list[Detector] = []
 
+        self.current_track: str = "menu"
+
     async def setup(self):
         await self.load_world(self.map_name)
 
@@ -68,6 +70,10 @@ class World(BaseInstance):
 
         self.window.blit(self.screen_filter, (0, 0), special_flags=pygame.BLEND_MULT)
 
+    async def finish(self):
+        pygame.mixer.stop()
+
+
     # region generation
     async def load_world(self,
                          map_name: str) -> None:
@@ -90,7 +96,11 @@ class World(BaseInstance):
         await self.create_callbacks()
         await self.set_music()
 
+        print(self.map_name)
+        print(self.terrain_scene.map_size_pixels)
+
     async def purge_world(self) -> None:
+        pygame.mixer.stop()
         self.scenes.clear()
         self.event_handler.clear()
         self.detectors.clear()
@@ -191,13 +201,19 @@ class World(BaseInstance):
 
     async def set_music(self) -> None:
         track_name = self.map_dict["music"]["track"]
+        print(track_name)
         if track_name is None:
             pygame.mixer.music.stop()
             return
 
         track_volume = self.map_dict["music"]["volume"]
-        track_path = f"{Resource.project_assets_directory}sound/music/{self.map_dict['music']['track']}.ogg"
-        pygame.mixer.music.load(track_path)
+
+        if track_name != self.current_track:
+            print("i")
+            track_path = f"{Resource.project_assets_directory}sound/music/{self.map_dict['music']['track']}.ogg"
+            self.current_track = track_name
+            pygame.mixer.music.load(track_path)
+            pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(track_volume)
 
     async def create_detectors(self) -> None:
@@ -270,8 +286,8 @@ class World(BaseInstance):
     async def swap_velocity(self) -> None:
         if self.player.velocity == self.player.exploration_velocity:
             self.player.velocity = self.player.chase_velocity
-            print('Chase velocity')
+            print('Chase')
             return
 
         self.player.velocity = self.player.exploration_velocity
-        print('Exploration velocity')
+        print('Exploration')

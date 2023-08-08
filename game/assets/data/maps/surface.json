@@ -1,29 +1,29 @@
 {
   "music": {
     "track": "menu",
-    "volume": 1
+    "volume": 0.25
   },
 
   "graphics": {
     "color_id": 1,
 
-    "filter_enabled": false,
-    "filter_brightness": 0,
+    "filter_enabled": true,
+    "filter_brightness": 192,
 
     "spotlight_enabled": false
   },
 
   "initial_condition": {
-    "position": [250, 223],
+    "position": [250, 225],
     "angle": 90
   },
 
   "detectors": {
     "next_zone_1": {
-      "rect": [0, 750, 400, 50],
+      "rect": [0, 775, 400, 25],
       "action": "switch_zone",
       "map_name": "abyss_1",
-      "player_new_position": [600, 200],
+      "player_new_position": [800, 25],
       "player_new_angle": 90
     }
   },

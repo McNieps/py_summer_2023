@@ -1,3 +1,33 @@
 {
+  "music": {
+    "track": null,
+    "volume": 1
+  },
 
+  "graphics": {
+    "color_id": 1,
+
+    "filter_enabled": true,
+    "filter_brightness": -128,
+
+    "spotlight_enabled": true
+  },
+
+  "initial_condition": {
+    "position": [25, 144],
+    "angle": 0
+  },
+
+  "detectors": {
+    "next_zone_1": {
+      "rect": [1530, 1250, 70, 150],
+      "action": "switch_zone",
+      "map_name": "level_5",
+      "player_new_position": [25, 1550],
+      "player_new_angle": 90
+    }
+  },
+
+  "entities": {
+  }
 }

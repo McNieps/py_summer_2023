@@ -4,6 +4,6 @@
   "radius": 2,
   "exploration_thrust": 3500000,
   "chase_thrust": 5000000,
-  "boost_multiplier": 2,
+  "boost_multiplier": 5,
   "integrity": 100
 }

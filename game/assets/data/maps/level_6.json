@@ -1,7 +1,7 @@
 {
   "music": {
-    "track": "ruin_2",
-    "volume": 0.5
+    "track": "ruin_1",
+    "volume": 0.25
   },
 
   "graphics": {
@@ -14,17 +14,17 @@
   },
 
   "initial_condition": {
-    "position": [100, 250],
+    "position": [25, 144],
     "angle": 0
   },
 
   "detectors": {
     "next_zone_1": {
-      "rect": [1575, 400, 25, 350],
+      "rect": [1530, 1250, 70, 150],
       "action": "switch_zone",
-      "map_name": "level_3",
-      "player_new_position": [25, 616],
-      "player_new_angle": 0
+      "map_name": "level_2",
+      "player_new_position": [25, 1550],
+      "player_new_angle": 90
     }
   },
 
