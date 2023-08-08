@@ -29,5 +29,11 @@
   },
 
   "entities": {
+    "bloby": {
+      "type": "blob",
+      "position":2000,
+      "speed": 173,
+      "direction": [-1, 0]
+    }
   }
 }
