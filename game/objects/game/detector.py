@@ -27,7 +27,7 @@ class Detector:
         if action == "switch_zone":
             self.linked_world.spawn_position = self.detector_dict["player_new_position"]
             self.linked_world.spawn_angle = self.detector_dict["player_new_angle"]
-            await self.linked_world.load_world(self.detector_dict["map_name"])
+            await self.linked_world.change_world(self.detector_dict["map_name"])
 
         elif action == "switch_music":
             await self.linked_world.set_music(self.detector_dict["track"], self.detector_dict["volume"])
