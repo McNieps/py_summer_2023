@@ -18,8 +18,9 @@ class Detector:
             return
 
         if self.detector_dict["action"] == "switch_zone":
-            self.linked_world.spawn_position = self.detector_dict["spawn_position"]
-            self.linked_world.spawn_angle = self.detector_dict["spawn_angle"]
+            self.linked_world.spawn_position = self.detector_dict["player_new_position"]
+            self.linked_world.spawn_angle = self.detector_dict["player_new_angle"]
+            print(self.detector_dict)
             await self.linked_world.load_world(self.detector_dict["map_name"])
 
         else:

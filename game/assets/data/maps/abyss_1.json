@@ -4,9 +4,18 @@
     "volume": 0.75
   },
 
+  "graphics": {
+    "color_id": 1,
+
+    "filter_enabled": true,
+    "filter_brightness": 192,
+
+    "spotlight_enabled": true
+  },
+
   "initial_condition": {
     "position": [200, 200],
-    "angle": 0
+    "angle": 90
   },
 
   "detectors": {

@@ -14,6 +14,10 @@ from game.objects.game.collision_types import CollisionTypes
 from game.objects.game.rock import Rock
 from game.objects.game.vent import Vent
 from game.objects.game.detector import Detector
+from game.objects.game.stars import Stars
+from game.objects.game.sea_top import SeaTop
+from game.objects.game.sea_boat import SeaBoat
+from game.objects.game.sea_botton import SeaBottom
 
 
 class World(BaseInstance):
@@ -49,6 +53,10 @@ class World(BaseInstance):
 
         for scene in self.scenes:
             scene.update(self.delta)
+
+        if self.map_name == "surface" and self.player.position.position[1] < 225:
+            force = tuple(pygame.Vector2(0, 200000).rotate(self.player.position.a))
+            self.player.position.body.apply_force_at_local_point(force, (0, 0))
 
         for detector in self.detectors:
             await detector.update(tuple(self.player.position.position))
@@ -106,17 +114,26 @@ class World(BaseInstance):
     async def create_entities(self) -> None:
 
         self.player = Player(self.entity_scene, self.spawn_position)   # (850, 20))
-
+        self.player.position.a = self.spawn_angle
         tile_collision = TileCollision(self.collision_map,
                                        TileHelper.tile_size,
                                        collision_type=CollisionTypes.WALL,
                                        wall_friction=0.2)
 
-        additional_entities = []
+        additional_background_entities = []
+        additional_foreground_entities = []
         for map_entities_dict in Resource.data["maps"][self.map_name]["entities"].values():
-            additional_entities.append(self.create_entity_from_dict(map_entities_dict))
+            is_background, entity = self.create_entity_from_dict(map_entities_dict)
+            if is_background:
+                additional_background_entities.append(entity)
+                continue
+            additional_foreground_entities.append(entity)
+            # additional_entities.append(self.create_entity_from_dict(map_entities_dict))
 
-        self.entity_scene.add_entities(self.player, tile_collision, *additional_entities)
+        self.entity_scene.add_entities(tile_collision,
+                                       *additional_background_entities,
+                                       self.player,
+                                       *additional_foreground_entities)
 
         if self.map_dict["graphics"]["spotlight_enabled"]:
             player_spotlight = PlayerSpotlight(self.player.position,
@@ -192,28 +209,46 @@ class World(BaseInstance):
 
     @classmethod
     def create_entity_from_dict(cls,
-                                entity_dict: dict) -> Entity:
+                                entity_dict: dict) -> tuple[bool, Entity]:
+        """Return a bool indicating whether the entity is a background entity and the entity itself"""
 
         entity_type = entity_dict["type"]
-        entity_position = entity_dict["position"]
-        entity_angle = entity_dict["angle"]
 
         if entity_type == "vent":
+            vent_position = entity_dict["position"]
+            vent_angle = entity_dict["angle"]
             vent_strength = entity_dict["strength"]
             vent_pattern = entity_dict["pattern"]
             vent_offset = entity_dict["offset"]
-            return Vent(entity_position,
-                        entity_angle,
-                        vent_strength,
-                        vent_pattern,
-                        vent_offset)
+            return False, Vent(vent_position,
+                               vent_angle,
+                               vent_strength,
+                               vent_pattern,
+                               vent_offset)
 
         if entity_type.startswith("rock_"):
+            rock_position = entity_dict["position"]
+            rock_angle = entity_dict["angle"]
             rock_speed = entity_dict["speed"]
-            return Rock(entity_type.removeprefix("rock_"),
-                        entity_position,
-                        rock_speed,
-                        entity_angle)
+            return False, Rock(entity_type.removeprefix("rock_"),
+                               rock_position,
+                               rock_speed,
+                               rock_angle)
+
+        if entity_type == "stars":
+            return True, Stars()
+
+        if entity_type == "sea_top":
+            return True, SeaTop()
+
+        if entity_type == "sea_boat":
+            return True, SeaBoat()
+
+        if entity_type == "sea_bottom":
+            return False, SeaBottom()
+
+        else:
+            raise ValueError(f"Unknown entity type {entity_type}")
 
     def sync_camera_with_player(self) -> None:
         camera_x = min(max(0, self.player.position.position[0]-200), self.terrain_scene.map_size_pixels[0] - 400)

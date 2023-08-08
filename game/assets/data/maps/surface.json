@@ -14,7 +14,7 @@
   },
 
   "initial_condition": {
-    "position": [200, 200],
+    "position": [200, 400],
     "angle": 90
   },
 
@@ -22,12 +22,27 @@
     "next_zone_1": {
       "rect": [0, 750, 400, 50],
       "action": "switch_zone",
-      "zone": "abyss_1",
-      "player_new_position": [200, 200],
-      "player_new_angle": -90
+      "map_name": "abyss_1",
+      "player_new_position": [600, 200],
+      "player_new_angle": 90
     }
   },
 
   "entities": {
+    "stars": {
+      "type": "stars"
+    },
+
+    "sea_top": {
+      "type": "sea_top"
+    },
+
+    "sea_boat": {
+      "type": "sea_boat"
+    },
+
+    "sea_bottom": {
+      "type": "sea_bottom"
+    }
   }
 }
