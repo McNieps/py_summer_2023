@@ -5,7 +5,7 @@ from isec.environment import Entity, Pos, Sprite
 
 class Stars(Entity):
     def __init__(self) -> None:
-        position = Pos(position=(200, 75))
+        position = Pos(position=(190, 78))
         sprite = Sprite(Resource.image["menu"]["stars"],
                         "static")
 

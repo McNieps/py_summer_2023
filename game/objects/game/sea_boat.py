@@ -5,7 +5,7 @@ from isec.environment import Entity, Pos, Sprite
 
 class SeaBoat(Entity):
     def __init__(self) -> None:
-        position = Pos(position=(190, 212))
+        position = Pos(position=(190, 205))
         sprite = Sprite(Resource.image["game"]["boat"],
                         "static")
 

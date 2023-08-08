@@ -43,6 +43,13 @@
 
     "sea_bottom": {
       "type": "sea_bottom"
+    },
+
+    "blob": {
+      "type": "blob",
+      "position": 0,
+      "speed": 200,
+      "direction": [0, 1]
     }
   }
 }

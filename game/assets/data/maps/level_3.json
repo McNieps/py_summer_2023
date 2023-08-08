@@ -23,7 +23,7 @@
       "rect": [1575, 600, 25, 75],
       "action": "switch_zone",
       "map_name": "level_4",
-      "player_new_position": [25, 192],
+      "player_new_position": [25, 200],
       "player_new_angle": 0
     }
   },

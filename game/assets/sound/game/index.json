@@ -1,6 +1,13 @@
 {
-  "sub_slow": 0.4,
-  "sub_fast": 0.4,
-  "sub_slow_boost": 0.4,
-  "sub_fast_boost": 0.4
+  "sub_slow": 0.5,
+  "sub_fast": 0.5,
+  "sub_slow_boost": 0.5,
+  "sub_fast_boost": 0.5,
+  "light_hit_1": 0.5,
+  "light_hit_2": 0.5,
+  "medium_hit_1": 0.5,
+  "medium_hit_2": 0.5,
+  "big_hit_1": 0.5,
+  "big_hit_2": 0.5,
+  "monster": 0.5
 }

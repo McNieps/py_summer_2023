@@ -15,6 +15,6 @@
 
     "max_simultaneous_sounds": 64,
 
-    "default_volume": 0.5
+    "volume": 0.5
   }
 }

@@ -1,5 +1,6 @@
 import pygame
 
+from isec.app import Resource
 from isec.instance import BaseInstance, LoopHandler
 from isec.environment import EntityScene
 

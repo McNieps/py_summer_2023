@@ -35,6 +35,32 @@ class EntityScene(Scene):
                     self.space.add(entity.position.body)
                 self.space.add(*[shape for shape in entity.position.shapes if shape not in self.space.shapes])
 
+    def remove_entities(self,
+                        *entities) -> None:
+
+        for entity in entities:
+            if entity not in self.entities:
+                continue
+
+            if isinstance(entity.position, PymunkPos):
+                if entity.position.body in self.space.bodies:
+                    self.space.remove(entity.position.body)
+                self.space.remove(*entity.position.shapes)
+
+            self.entities.remove(entity)
+
+    def remove_entities_by_name(self,
+                                name) -> None:
+
+        for entity in self.entities:
+            if entity.__class__.__name__ == name:
+                if isinstance(entity.position, PymunkPos):
+                    if entity.position.body in self.space.bodies:
+                        self.space.remove(entity.position.body)
+                    self.space.remove(*entity.position.shapes)
+
+                self.remove_entities(entity)
+
     def update(self,
                delta: float) -> None:
 

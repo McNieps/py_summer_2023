@@ -223,7 +223,7 @@ class Resource:
                    data_dict: dict = None) -> None:
 
         if master_volume is None:
-            master_volume = cls.data["engine"]["resource"]["sound"]["default_volume"]
+            master_volume = cls.data["engine"]["resource"]["sound"]["volume"]
 
         if sound_dict is None:
             sound_dict = cls.sound

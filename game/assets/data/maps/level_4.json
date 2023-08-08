@@ -8,13 +8,13 @@
     "color_id": 1,
 
     "filter_enabled": true,
-    "filter_brightness": -128,
+    "filter_brightness": -64,
 
     "spotlight_enabled": true
   },
 
   "initial_condition": {
-    "position": [25, 144],
+    "position": [25, 200],
     "angle": 0
   },
 
@@ -25,9 +25,38 @@
       "map_name": "level_5",
       "player_new_position": [25, 1550],
       "player_new_angle": 90
+    },
+
+    "steal_artifact": {
+      "rect": [544, 188, 24, 24],
+      "action": "remove_entity",
+      "entity_name": "Artifact",
+      "once": true
+    },
+
+    "chase_music": {
+      "rect": [544, 188, 24, 24],
+      "action": "switch_music",
+      "track": "chase_1",
+      "volume": 1,
+      "once": true
+    },
+
+    "spawn_blob": {
+      "rect": [544, 188, 24, 24],
+        "action": "add_entity",
+        "entity_dict": {
+          "type": "blob",
+          "position": 1000,
+          "speed": 60,
+          "direction": [-1, 0]
+        }
     }
   },
 
   "entities": {
+    "artifact": {
+      "type": "artifact"
+    }
   }
 }

@@ -18,6 +18,8 @@ from game.objects.game.stars import Stars
 from game.objects.game.sea_top import SeaTop
 from game.objects.game.sea_boat import SeaBoat
 from game.objects.game.sea_botton import SeaBottom
+from game.objects.game.blob import Blob
+from game.objects.game.artifact import Artifact
 
 
 class World(BaseInstance):
@@ -72,7 +74,6 @@ class World(BaseInstance):
 
     async def finish(self):
         pygame.mixer.stop()
-
 
     # region generation
     async def load_world(self,
@@ -149,6 +150,12 @@ class World(BaseInstance):
 
             self.entity_scene.add_entities(player_spotlight)
 
+    async def add_entity_dict(self,
+                              entity_dict: dict) -> None:
+
+        is_background, entity = self.create_entity_from_dict(entity_dict)
+        self.entity_scene.add_entities(entity)
+
     async def generate_screen_filter(self) -> None:
         if not self.map_dict["graphics"]["filter_enabled"] or self.map_dict["graphics"]["filter_brightness"] == 255:
             self.screen_filter = pygame.Surface((1, 1), pygame.SRCALPHA)
@@ -196,16 +203,22 @@ class World(BaseInstance):
         self.event_handler.register_buttondown_callback(1, self.print_location)
         self.event_handler.register_quit_callback(LoopHandler.stop_game)
 
-    async def set_music(self) -> None:
-        track_name = self.map_dict["music"]["track"]
+    async def set_music(self,
+                        track_name: str = None,
+                        track_volume: str = None) -> None:
+
+        if track_name is None:
+            track_name = self.map_dict["music"]["track"]
+
         if track_name is None:
             pygame.mixer.music.stop()
             return
 
-        track_volume = self.map_dict["music"]["volume"]
+        if track_volume is None:
+            track_volume = self.map_dict["music"]["volume"] * Resource.data["engine"]["resource"]["sound"]["volume"]
 
         if track_name != self.current_track:
-            track_path = f"{Resource.project_assets_directory}sound/music/{self.map_dict['music']['track']}.ogg"
+            track_path = f"{Resource.project_assets_directory}sound/music/{track_name}.ogg"
             self.current_track = track_name
             pygame.mixer.music.load(track_path)
             pygame.mixer.music.play(-1)
@@ -218,8 +231,7 @@ class World(BaseInstance):
 
     # endregion
 
-    @classmethod
-    def create_entity_from_dict(cls,
+    def create_entity_from_dict(self,
                                 entity_dict: dict) -> tuple[bool, Entity]:
         """Return a bool indicating whether the entity is a background entity and the entity itself"""
 
@@ -257,6 +269,15 @@ class World(BaseInstance):
 
         if entity_type == "sea_bottom":
             return False, SeaBottom()
+
+        if entity_type == "blob":
+            return False, Blob(self.player,
+                               entity_dict["direction"],
+                               entity_dict["position"],
+                               entity_dict["speed"])
+
+        if entity_type == "artifact":
+            return False, Artifact()
 
         else:
             raise ValueError(f"Unknown entity type {entity_type}")
