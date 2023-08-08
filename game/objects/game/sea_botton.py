@@ -10,7 +10,6 @@ class SeaBottom(Entity):
     def __init__(self) -> None:
         bottom_offset = 150+75
         bottom_size = (400, 225)
-        print(bottom_offset+bottom_size[1]/2)
         position = Pos(position=(200, bottom_offset+bottom_size[1]/2))
 
         # Only get the top half of the images

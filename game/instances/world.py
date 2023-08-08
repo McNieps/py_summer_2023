@@ -96,9 +96,6 @@ class World(BaseInstance):
         await self.create_callbacks()
         await self.set_music()
 
-        print(self.map_name)
-        print(self.terrain_scene.map_size_pixels)
-
     async def purge_world(self) -> None:
         pygame.mixer.stop()
         self.scenes.clear()
@@ -201,7 +198,6 @@ class World(BaseInstance):
 
     async def set_music(self) -> None:
         track_name = self.map_dict["music"]["track"]
-        print(track_name)
         if track_name is None:
             pygame.mixer.music.stop()
             return
@@ -209,7 +205,6 @@ class World(BaseInstance):
         track_volume = self.map_dict["music"]["volume"]
 
         if track_name != self.current_track:
-            print("i")
             track_path = f"{Resource.project_assets_directory}sound/music/{self.map_dict['music']['track']}.ogg"
             self.current_track = track_name
             pygame.mixer.music.load(track_path)

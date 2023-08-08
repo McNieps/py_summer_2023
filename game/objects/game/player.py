@@ -141,8 +141,6 @@ class Player(Entity):
         self.pressed = {"up": False, "down": False, "left": False, "right": False, "boost": False}
 
     def play_sound(self) -> None:
-        print(self.sound_to_play)
-
         if self.sound_to_play is None:
             if self.current_sound is not None:
                 self.current_channel.fadeout(1000)
