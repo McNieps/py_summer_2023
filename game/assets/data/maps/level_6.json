@@ -31,9 +31,9 @@
   "entities": {
     "bloby": {
       "type": "blob",
-      "position": 0,
-      "speed": 50,
-      "direction": [1, 0]
+      "position":800,
+      "speed": 6,
+      "direction": [0, -1]
     }
   }
 }
