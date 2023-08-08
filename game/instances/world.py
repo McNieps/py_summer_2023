@@ -20,11 +20,13 @@ from game.objects.game.sea_boat import SeaBoat
 from game.objects.game.sea_botton import SeaBottom
 from game.objects.game.blob import Blob
 from game.objects.game.artifact import Artifact
+from game.objects.game.transition import Transition
+from game.objects.game.screen_filter import ScreenFilter
 
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "abyss_1") -> None:
+                 map_name: str = "abyss_4") -> None:
 
         super().__init__(fps=120)
 
@@ -35,10 +37,13 @@ class World(BaseInstance):
         self.scenes: list[Scene] = []
         self.entity_scene: EntityScene | None = None
         self.terrain_scene: TilemapScene | None = None
+        self.gui_scene: EntityScene = EntityScene(fps=self.fps)
         self.collision_map: list[list[bool]] | None = None
 
+        self.screen_filter: ScreenFilter = ScreenFilter()
+        self.transition: Transition | None = None
+
         self.player: Player | None = None
-        self.screen_filter: pygame.Surface | None = None
 
         self.spawn_position: tuple[int, int] | None = None
         self.spawn_angle: float | None = None
@@ -46,6 +51,8 @@ class World(BaseInstance):
         self.detectors: list[Detector] = []
 
         self.current_track: str = "menu"
+
+        self.gui_scene.add_entities(self.screen_filter)
 
     async def setup(self):
         await self.load_world(self.map_name)
@@ -57,6 +64,7 @@ class World(BaseInstance):
 
         for scene in self.scenes:
             scene.update(self.delta)
+        self.gui_scene.update(self.delta)
 
         if self.map_name == "surface" and self.player.position.position[1] < 223:
             force = tuple(pygame.Vector2(0, 200000).rotate(self.player.position.a))
@@ -69,13 +77,31 @@ class World(BaseInstance):
 
         for scene in self.scenes:
             scene.render()
+        self.gui_scene.render()
 
-        self.window.blit(self.screen_filter, (0, 0), special_flags=pygame.BLEND_MULT)
+        if self.transition is not None:
+            if self.transition.done:
+                self.transition = None
+                self.gui_scene.remove_entities_by_name("Transition")
+            else:
+                await self.change_world()
 
     async def finish(self):
         pygame.mixer.stop()
 
     # region generation
+    async def change_world(self,
+                           map_name: str = None) -> None:
+        if self.transition is None:
+            self.transition = Transition(map_name)
+            self.gui_scene.add_entities(self.transition)
+
+        print(f"Attempting to change world to {self.transition.map_name}")
+
+        if self.transition.ready_to_transition and not self.transition.transitioned:
+            self.transition.transitioned = True
+            await self.load_world(self.transition.map_name)
+
     async def load_world(self,
                          map_name: str) -> None:
 
@@ -157,23 +183,10 @@ class World(BaseInstance):
         self.entity_scene.add_entities(entity)
 
     async def generate_screen_filter(self) -> None:
-        if not self.map_dict["graphics"]["filter_enabled"] or self.map_dict["graphics"]["filter_brightness"] == 255:
-            self.screen_filter = pygame.Surface((1, 1), pygame.SRCALPHA)
-            return
+        filter_enabled = self.map_dict["graphics"]["filter_enabled"]
+        filter_brightness = self.map_dict["graphics"]["filter_brightness"]
 
-        filter_darkness = self.map_dict["graphics"]["filter_brightness"]
-        self.screen_filter = Resource.image["game"]["shadow"].copy()
-
-        if filter_darkness < 0:
-            filter_darkness = abs(filter_darkness)
-            surf = pygame.Surface((400, 300))
-            surf.fill((filter_darkness, filter_darkness, filter_darkness))
-            self.screen_filter.blit(surf, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
-            return
-
-        surf = pygame.Surface((400, 300))
-        surf.fill((filter_darkness, filter_darkness, filter_darkness))
-        self.screen_filter.blit(surf, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
+        self.screen_filter.update_filter(filter_enabled, filter_brightness)
 
     async def create_callbacks(self) -> None:
         # Collision callbacks
