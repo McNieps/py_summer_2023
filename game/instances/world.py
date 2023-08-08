@@ -26,7 +26,7 @@ from game.objects.game.screen_filter import ScreenFilter
 
 class World(BaseInstance):
     def __init__(self,
-                 map_name: str = "abyss_4") -> None:
+                 map_name: str = "level_6") -> None:
 
         super().__init__(fps=120)
 
@@ -66,7 +66,7 @@ class World(BaseInstance):
             scene.update(self.delta)
         self.gui_scene.update(self.delta)
 
-        if self.map_name == "surface" and self.player.position.position[1] < 223:
+        if self.map_name in ["surface","surface_end"] and self.player.position.position[1] < 223:
             force = tuple(pygame.Vector2(0, 200000).rotate(self.player.position.a))
             self.player.position.body.apply_force_at_local_point(force, (0, 0))
 

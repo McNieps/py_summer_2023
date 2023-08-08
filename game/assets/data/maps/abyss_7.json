@@ -23,11 +23,17 @@
       "rect": [390, 0, 1000, 25],
       "action": "switch_zone",
       "map_name": "abyss_8",
-      "player_new_position": [105, 170],
+      "player_new_position": [800, 1570],
       "player_new_angle": 90
     }
   },
 
   "entities": {
+    "blob": {
+      "type": "blob",
+      "position": 1900,
+      "speed": 145,
+      "direction": [0, -1]
+    }
   }
 }

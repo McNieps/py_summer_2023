@@ -14,7 +14,7 @@
   },
 
   "initial_condition": {
-    "position": [5, 616],
+    "position": [50, 616],
     "angle": 90
   },
 
@@ -29,5 +29,11 @@
   },
 
   "entities": {
+    "bloby": {
+      "type": "blob",
+      "position": 0,
+      "speed": 50,
+      "direction": [1, 0]
+    }
   }
 }

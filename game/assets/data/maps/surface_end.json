@@ -1,0 +1,49 @@
+{
+  "music": {
+    "track": "menu",
+    "volume": 0.25
+  },
+
+  "graphics": {
+    "color_id": 1,
+
+    "filter_enabled": true,
+    "filter_brightness": 192,
+
+    "spotlight_enabled": false
+  },
+
+  "initial_condition": {
+    "position": [250, 225],
+    "angle": 90
+  },
+
+  "detectors": {
+    "next_zone_1": {
+      "rect": [0, 775, 400, 25],
+      "action": "switch_zone",
+      "map_name": "abyss_1",
+      "player_new_position": [800, 25],
+      "player_new_angle": 90
+    }
+  },
+
+  "entities": {
+    "stars": {
+      "type": "stars"
+    },
+
+    "sea_top": {
+      "type": "sea_top"
+    },
+
+    "sea_boat": {
+      "type": "sea_boat"
+    },
+
+    "sea_bottom": {
+      "type": "sea_bottom"
+    }
+
+  }
+}

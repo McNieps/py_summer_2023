@@ -23,11 +23,17 @@
       "rect": [1575, 200, 25, 300],
       "action": "switch_zone",
       "map_name": "level_6",
-      "player_new_position": [5, 616],
+      "player_new_position": [50, 616],
       "player_new_angle": 90
     }
   },
 
   "entities": {
+    "bloby": {
+      "type": "blob",
+      "position": 0,
+      "speed": 50,
+      "direction": [1, 0]
+    }
   }
 }
