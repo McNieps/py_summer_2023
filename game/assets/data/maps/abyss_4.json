@@ -24,6 +24,13 @@
       "map_name": "level_1",
       "player_new_position": [25, 144],
       "player_new_angle": 0
+    },
+    "music": {
+      "rect": [1392, 1200, 20, 176],
+      "action": "switch_music",
+      "track": "ruin_1",
+      "volume": 0.5,
+      "once": true
     }
   },
 
