@@ -8,7 +8,7 @@
     "color_id": 1,
 
     "filter_enabled": true,
-    "filter_brightness": 128,
+    "filter_brightness": 0,
 
     "spotlight_enabled": true
   },
