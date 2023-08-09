@@ -42,7 +42,6 @@ class Player(Entity):
         # Physics related
         self.thrust_exploration = Resource.data["objects"]["player"]["dynamics"]["thrust_exploration"]
         self.thrust_chase = Resource.data["objects"]["player"]["dynamics"]["thrust_chase"]
-        print(f"thrust_{Player.thrust_type}")
         self.thrust_current = Resource.data["objects"]["player"]["dynamics"][f"thrust_{Player.thrust_type}"]
         self.torque = Resource.data["objects"]["player"]["dynamics"]["torque"]
         self.boost = Resource.data["objects"]["player"]["dynamics"]["boost_multiplier"]

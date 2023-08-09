@@ -59,8 +59,6 @@ class World(BaseInstance):
     async def loop(self) -> None:
         self.window.fill(self.color)
 
-        LoopHandler.fps_caption()
-
         if self.transition is None:
             for scene in self.scenes:
                 scene.update(self.delta)
@@ -88,6 +86,8 @@ class World(BaseInstance):
                 self.gui_scene.remove_entities_by_name("Transition")
             else:
                 await self.change_world()
+
+        self.screen_filter.position.position = tuple(self.entity_scene.camera.get_offset_pos(self.player.position))
 
     async def finish(self):
         pygame.mixer.stop()
@@ -315,10 +315,10 @@ class World(BaseInstance):
         print(self.entity_scene.camera.position.position + pygame.mouse.get_pos())
 
     async def swap_velocity(self) -> None:
-        if self.player.velocity == self.player.exploration_velocity:
-            self.player.velocity = self.player.chase_velocity
+        if self.player.thrust_current == self.player.thrust_exploration:
+            self.player.change_thrust_type("chase")
             print('Chase')
             return
 
-        self.player.velocity = self.player.exploration_velocity
+        self.player.change_thrust_type("exploration")
         print('Exploration')

@@ -55,6 +55,9 @@ class Sprite:
                 raise ValueError("Cached rendering technique requires cached surface.")
             self._rendering_technique = RenderingTechniques.cached
 
+        elif rendering_technique == "optimized_static":
+            self._rendering_technique= RenderingTechniques.optimized_static
+
         else:
             raise ValueError("Invalid rendering technique.")
 

@@ -1,6 +1,7 @@
 {
   "music": {
-    "track": null
+    "track": null,
+    "volume": 0
   },
 
   "graphics": {

@@ -108,10 +108,10 @@ class PlayerSpotlight(Entity):
                 y_floor = math.floor(vec_map_check[1])
                 x_floor = math.floor(vec_map_check[0])
 
-                if any((x_floor < 0,
-                        y_floor < 0,
-                        x_floor >= len(self.collision_map[0]),
-                        y_floor >= len(self.collision_map))):
+                if any((x_floor < 1,
+                        y_floor < 1,
+                        x_floor >= len(self.collision_map[0])-1,
+                        y_floor >= len(self.collision_map)-1)):
 
                     tile_found = True
                     current_distance = max_distance

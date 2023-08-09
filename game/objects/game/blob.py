@@ -41,7 +41,7 @@ class Blob(Entity):
                 monster_surfaces[i] = pygame.transform.flip(monster_surfaces[i], False, True)
 
         self.animated_sprite = AnimatedSprite(monster_surfaces,
-                                              rendering_technique="static",
+                                              rendering_technique="optimized_static",
                                               frame_durations=[1, 0, 0])
 
         super().__init__(position, self.animated_sprite)
