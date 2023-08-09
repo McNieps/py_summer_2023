@@ -116,7 +116,7 @@ class PlayerSpotlight(Entity):
                     tile_found = True
                     current_distance = max_distance
 
-                if self.collision_map[y_floor][x_floor]:
+                elif self.collision_map[y_floor][x_floor]:
                     tile_found = True
 
             if tile_found:

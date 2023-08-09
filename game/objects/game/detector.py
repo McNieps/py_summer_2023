@@ -48,8 +48,8 @@ class Detector:
         elif action == "add_entity":
             await self.linked_world.add_entity_dict(self.detector_dict["entity_dict"])
 
-        elif action == "change_player_speed":
-            self.linked_world.player.change_speed(self.detector_dict["speed"])
+        elif action == "change_player_thrust_type":
+            self.linked_world.player.change_thrust_type(self.detector_dict["thrust_type"])
 
         else:
             raise ValueError(f"Invalid detector action: {self.detector_dict['action']}")

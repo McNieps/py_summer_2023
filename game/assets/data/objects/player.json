@@ -1,16 +1,28 @@
 {
-  "density": 50,
-  "friction": 0.2,
-  "radius": 2,
-  "exploration_thrust": 3500000,
-  "chase_thrust": 5000000,
-  "boost_multiplier": 2,
-  "life": 10,
+  "physics": {
+    "density": 50,
+    "elasticity": 0.3,
+    "friction": 0.2,
+    "radius": 2
+  },
 
-  "light_hit_threshold": 1000000,
-  "medium_hit_threshold": 5000000,
-  "heavy_hit_threshold": 10000000,
-  "light_hit_damage": 0,
-  "medium_hit_damage": 0,
-  "heavy_hit_damage": 10
+  "dynamics": {
+    "thrust_exploration": 35000,
+    "thrust_chase": 50000,
+    "torque": 250,
+    "boost_multiplier": 2
+  },
+
+  "gameplay": {
+    "life": 10,
+
+    "hit_threshold_light": 1000000,
+    "hit_damage_light": 0,
+
+    "hit_threshold_medium": 5000000,
+    "hit_damage_medium": 0,
+
+    "hit_threshold_heavy": 10000000,
+    "hit_damage_heavy": 0
+  }
 }

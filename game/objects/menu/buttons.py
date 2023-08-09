@@ -1,3 +1,5 @@
+import pygame
+
 from isec.app import Resource
 from isec.gui import Button
 from isec.instance import BaseInstance, LoopHandler
@@ -39,6 +41,12 @@ class PlayButton(Button):
             Resource.sound["effect"]["click_2"].play()
             x = World()
             await x.execute()
+
+            pygame.mixer.music.load(Resource.project_assets_directory+"sound/music/menu.ogg")
+            music_volume = (Resource.data["engine"]["resource"]["sound"]["master_volume"] *
+                            Resource.data["engine"]["resource"]["sound"]["music_volume"])
+            pygame.mixer.music.set_volume(music_volume)
+            pygame.mixer.music.play(-1)
 
         super().__init__(linked_instance,
                          linked_scene,

@@ -67,8 +67,8 @@
 
     "change_player_speed": {
       "rect": [544, 188, 24, 24],
-      "action": "change_player_speed",
-      "speed": "chase"
+      "action": "change_player_thrust_type",
+      "thrust_type": "chase"
     }
   },
 

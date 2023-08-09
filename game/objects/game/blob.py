@@ -8,16 +8,18 @@ from isec.environment.position import SimplePos
 
 class Blob(Entity):
     def __init__(self,
-                 player: Entity,
+                 world,
                  direction: tuple[int, int],
                  pos: int,
                  speed: int) -> None:
 
-        self.player = player
+        self.world = world
+        self.player = self.world.player
         self.direction = direction
         self.blocked = False
         self.player_dead = False
         self.player_dead_in = 1
+
         if all(direction):
             # raise error because no diagonal movement is allowed
             raise ValueError("No diagonal movement is allowed")
@@ -72,10 +74,11 @@ class Blob(Entity):
             self.animated_sprite.frame_durations = [1, 0, 0]
         else:
             self.animated_sprite.frame_durations = [0, 0, 1]
-            self.player.velocity *= 0
+            self.player.thrust_current *= 0
             self.player.position.body.velocity = tuple(self.position.speed)
             self.player_dead = True
             Resource.sound["game"]["heavy_hit_1"].play()
+            self.world.entity_scene.remove_entities_by_name("PlayerSpotlight")
     # kill dist = 70
         # open dist = 100
 

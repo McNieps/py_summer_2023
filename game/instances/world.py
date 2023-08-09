@@ -29,7 +29,7 @@ class World(BaseInstance):
 
     def __init__(self) -> None:
 
-        super().__init__(fps=120)
+        super().__init__(fps=Resource.data["instances"]["world"]["fps"])
         self.map_dict: dict = {}
 
         self.color = None
@@ -59,6 +59,8 @@ class World(BaseInstance):
     async def loop(self) -> None:
         self.window.fill(self.color)
 
+        LoopHandler.fps_caption()
+
         if self.transition is None:
             for scene in self.scenes:
                 scene.update(self.delta)
@@ -86,8 +88,6 @@ class World(BaseInstance):
                 self.gui_scene.remove_entities_by_name("Transition")
             else:
                 await self.change_world()
-
-
 
     async def finish(self):
         pygame.mixer.stop()
@@ -122,7 +122,8 @@ class World(BaseInstance):
         await self.create_detectors()
         await self.generate_screen_filter()
         await self.create_callbacks()
-        await self.set_music()
+        await self.set_music(self.map_dict["music"]["track"],
+                             self.map_dict["music"]["volume"])
 
     async def purge_world(self) -> None:
         pygame.mixer.fadeout(100)
@@ -222,10 +223,8 @@ class World(BaseInstance):
                         track_volume: str = None) -> None:
 
         if track_name is None:
-            track_name = self.map_dict["music"]["track"]
-
-        if track_name is None:
             pygame.mixer.music.stop()
+            self.current_track = None
             return
 
         if track_volume is None:
@@ -288,7 +287,7 @@ class World(BaseInstance):
             return False, SeaBottom()
 
         if entity_type == "blob":
-            return False, Blob(self.player,
+            return False, Blob(self,
                                entity_dict["direction"],
                                entity_dict["position"],
                                entity_dict["speed"])

@@ -10,8 +10,8 @@ from game.objects.menu.return_button import ReturnButton
 
 class Settings(BaseInstance):
     def __init__(self) -> None:
-        super().__init__(60)
-        self.scene = EntityScene(60)
+        super().__init__(Resource.data["instances"]["menu"]["fps"])
+        self.scene = EntityScene(Resource.data["instances"]["menu"]["fps"])
         self.scene.add_entities(ControlsButton(self, self.scene),
                                 SoundsButton(self, self.scene),
                                 ReturnButton(self, self.scene))

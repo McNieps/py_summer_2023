@@ -14,37 +14,38 @@ from game.objects.game.collision_types import CollisionTypes
 
 
 class Player(Entity):
-    velocity_type: str = "exploration"
+    thrust_type: str = "exploration"
 
     def __init__(self,
                  linked_scene: EntityScene,
                  initial_pos: tuple[int, int] = (100, 100)) -> None:
 
+        # Metadata
         self.linked_scene = linked_scene
-        self.dead = False
+
+        # Entity related
+        self.sprite_flipped = False
+        sprite = Sprite(Resource.image["game"]["submarine_1"], rendering_technique="rotated")
 
         position = PymunkPos(position=initial_pos, shape_collision_type=CollisionTypes.PLAYER)
-        player_surface = Resource.image["game"]["submarine_1"]
-
-        position.create_circle_shape(radius=Resource.data["objects"]["player"]["radius"],
-                                     friction=Resource.data["objects"]["player"]["friction"],
-                                     density=Resource.data["objects"]["player"]["density"])
-
-        sprite = Sprite(player_surface, rendering_technique="rotated")
+        position.create_circle_shape(radius=Resource.data["objects"]["player"]["physics"]["radius"],
+                                     friction=Resource.data["objects"]["player"]["physics"]["friction"],
+                                     density=Resource.data["objects"]["player"]["physics"]["density"],
+                                     elasticity=Resource.data["objects"]["player"]["physics"]["elasticity"])
 
         super().__init__(position, sprite)
 
-        self.sprite_flipped = False
-
         # Gameplay related
-        self.life = Resource.data["objects"]["player"]["life"]
+        self.life = Resource.data["objects"]["player"]["gameplay"]["life"]
+        self.dead = False
 
         # Physics related
-        self.exploration_velocity = Resource.data["objects"]["player"]["exploration_thrust"]
-        self.chase_velocity = Resource.data["objects"]["player"]["chase_thrust"]
-        self.velocity = Resource.data["objects"]["player"][f"{Player.velocity_type}_thrust"]
-        self.torque_mult = 0.5
-        self.boost_mult = Resource.data["objects"]["player"]["boost_multiplier"]
+        self.thrust_exploration = Resource.data["objects"]["player"]["dynamics"]["thrust_exploration"]
+        self.thrust_chase = Resource.data["objects"]["player"]["dynamics"]["thrust_chase"]
+        print(f"thrust_{Player.thrust_type}")
+        self.thrust_current = Resource.data["objects"]["player"]["dynamics"][f"thrust_{Player.thrust_type}"]
+        self.torque = Resource.data["objects"]["player"]["dynamics"]["torque"]
+        self.boost = Resource.data["objects"]["player"]["dynamics"]["boost_multiplier"]
 
         # Particle related
         self.max_bubble_spawn_frequency = 200
@@ -67,8 +68,8 @@ class Player(Entity):
 
         angle_difference = self.get_angle_cursor_player()
 
-        self.rotate_player(angle_difference, delta)
-        self.move_player(delta)
+        self.rotate_player(angle_difference)
+        self.move_player()
         self.spawn_bubble(delta)
         self.flip_sprite()
         self.play_sound()
@@ -91,19 +92,16 @@ class Player(Entity):
         return difference
 
     def rotate_player(self,
-                      angle_difference: float,
-                      delta: float) -> None:
+                      angle_difference: float) -> None:
 
         if angle_difference is None:
             return
 
-        torque = angle_difference * delta * self.torque_mult
+        torque = angle_difference * self.torque
+        self.position.body.apply_force_at_world_point((0, -torque), (self.position.position[0] + 1, 0))
+        self.position.body.apply_force_at_world_point((0, torque), (self.position.position[0] - 1, 0))
 
-        self.position.body.apply_force_at_world_point((0, -torque), (self.position.position[0] + 50000, 0))
-        self.position.body.apply_force_at_world_point((0, torque), (self.position.position[0] - 50000, 0))
-
-    def move_player(self,
-                    delta: float) -> None:
+    def move_player(self) -> None:
 
         forward_angle = math.degrees(self.position.body.rotation_vector.angle) % 360
 
@@ -122,7 +120,7 @@ class Player(Entity):
             self.sound_to_play = None
             return
 
-        self.sound_to_play = "sub_slow" if self.velocity == self.exploration_velocity else "sub_fast"
+        self.sound_to_play = "sub_slow" if self.thrust_current == self.thrust_exploration else "sub_fast"
 
         input_vec.normalize_ip()
         input_angle = (-input_vec.angle_to((1, 0))) % 360
@@ -130,12 +128,12 @@ class Player(Entity):
         if difference > 180:
             difference -= 360
 
-        speed = input_vec * delta * self.velocity
+        speed = input_vec * self.thrust_current
         if -90 < difference < 90:
             mult = 1+math.cos(math.radians(difference))**2
             if self.pressed["boost"]:
                 self.sound_to_play += "_boost"
-                mult *= self.boost_mult
+                mult *= self.boost
 
             speed *= mult
 
@@ -187,47 +185,54 @@ class Player(Entity):
     def handle_impact(self,
                       kinetic_energy: float) -> None:
 
-        light_hit = Resource.data["objects"]["player"]["light_hit_threshold"]
-        if kinetic_energy < light_hit:
+        thresholds = {hit_type: Resource.data["objects"]["player"]["gameplay"][f"hit_threshold_{hit_type}"]
+                      for hit_type in ["light", "medium", "heavy"]}
+
+        damages = {hit_type: Resource.data["objects"]["player"]["gameplay"][f"hit_damage_{hit_type}"]
+                   for hit_type in ["light", "medium", "heavy"]}
+
+        if kinetic_energy < thresholds["light"]:
             return
 
-        medium_hit = Resource.data["objects"]["player"]["medium_hit_threshold"]
-        if kinetic_energy < medium_hit:
+        if kinetic_energy < thresholds["medium"]:
             Resource.sound["game"][f"light_hit_{random.randint(1, 2)}"].play()
-            self.life -= Resource.data["objects"]["player"]["light_hit_damage"]
+            self.life -= damages["light"]
 
-        heavy_hit = Resource.data["objects"]["player"]["heavy_hit_threshold"]
-        if kinetic_energy < heavy_hit:
+        if kinetic_energy < thresholds["heavy"]:
             Resource.sound["game"][f"medium_hit_{random.randint(1, 2)}"].play()
-            self.life -= Resource.data["objects"]["player"]["medium_hit_damage"]
+            self.life -= damages["medium"]
 
         else:
             Resource.sound["game"][f"heavy_hit_{random.randint(1, 2)}"].play()
-            self.life -= Resource.data["objects"]["player"]["heavy_hit_damage"]
+            self.life -= damages["heavy"]
 
-    async def up(self) -> None:
+    async def cb_key_up(self) -> None:
         self.pressed["up"] = True
 
-    async def down(self) -> None:
+    async def cb_key_down(self) -> None:
         self.pressed["down"] = True
 
-    async def left(self) -> None:
+    async def cb_key_left(self) -> None:
         self.pressed["left"] = True
 
-    async def right(self) -> None:
+    async def cb_key_right(self) -> None:
         self.pressed["right"] = True
 
-    async def boost(self) -> None:
+    async def cb_key_boost(self) -> None:
         self.pressed["boost"] = True
 
     def add_control_callbacks(self, linked_instance: BaseInstance) -> None:
-        linked_instance.event_handler.register_keypressed_callback(Controls.UP, self.up)
-        linked_instance.event_handler.register_keypressed_callback(Controls.DOWN, self.down)
-        linked_instance.event_handler.register_keypressed_callback(Controls.LEFT, self.left)
-        linked_instance.event_handler.register_keypressed_callback(Controls.RIGHT, self.right)
-        linked_instance.event_handler.register_keypressed_callback(Controls.BOOST, self.boost)
+        linked_instance.event_handler.register_keypressed_callback(Controls.UP, self.cb_key_up)
+        linked_instance.event_handler.register_keypressed_callback(Controls.DOWN, self.cb_key_down)
+        linked_instance.event_handler.register_keypressed_callback(Controls.LEFT, self.cb_key_left)
+        linked_instance.event_handler.register_keypressed_callback(Controls.RIGHT, self.cb_key_right)
+        linked_instance.event_handler.register_keypressed_callback(Controls.BOOST, self.cb_key_boost)
 
-    def change_speed(self,
-                     speed_type: str) -> None:
-        Player.velocity_type = speed_type
-        self.velocity = Resource.data["objects"]["player"][f"{Player.velocity_type}_thrust"]
+    def change_thrust_type(self,
+                           thrust_type: str) -> None:
+
+        if thrust_type not in ["exploration", "chase"]:
+            raise Exception(f"Invalid thrust type: {thrust_type}")
+
+        Player.thrust_type = thrust_type
+        self.thrust_current = Resource.data["objects"]["player"]["dynamics"][f"thrust_{thrust_type}"]

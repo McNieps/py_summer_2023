@@ -10,5 +10,3 @@ class Artifact(Entity):
                                               [0.2 for _ in range(8)])
 
         super().__init__(self.position, self.animated_sprite)
-
-        print(Artifact.__name__)

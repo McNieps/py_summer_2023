@@ -42,11 +42,6 @@ class EntityScene(Scene):
             if entity not in self.entities:
                 continue
 
-            if isinstance(entity.position, PymunkPos):
-                if entity.position.body in self.space.bodies:
-                    self.space.remove(entity.position.body)
-                self.space.remove(*entity.position.shapes)
-
             self.entities.remove(entity)
 
     def remove_entities_by_name(self,
@@ -54,11 +49,6 @@ class EntityScene(Scene):
 
         for entity in self.entities:
             if entity.__class__.__name__ == name:
-                if isinstance(entity.position, PymunkPos):
-                    if entity.position.body in self.space.bodies:
-                        self.space.remove(entity.position.body)
-                    self.space.remove(*entity.position.shapes)
-
                 self.remove_entities(entity)
 
     def update(self,
