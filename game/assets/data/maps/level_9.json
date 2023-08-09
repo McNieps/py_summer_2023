@@ -14,8 +14,8 @@
   },
 
   "initial_condition": {
-    "position": [1570, 192],
-    "angle": 90
+    "position": [1575, 192],
+    "angle": 180
   },
 
   "detectors": {
@@ -23,7 +23,7 @@
       "rect": [0, 64, 25, 240],
       "action": "switch_zone",
       "map_name": "abyss_5",
-      "player_new_position": [1570, 1320],
+      "player_new_position": [1575, 1320],
       "player_new_angle": 90
     }
   },
@@ -31,8 +31,8 @@
   "entities": {
     "bloby": {
       "type": "blob",
-      "position":2200,
-      "speed": 165,
+      "position":2000,
+      "speed": 180,
       "direction": [-1, 0]
     }
   }

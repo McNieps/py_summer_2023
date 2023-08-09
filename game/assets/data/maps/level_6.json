@@ -15,7 +15,7 @@
 
   "initial_condition": {
     "position": [50, 616],
-    "angle": 90
+    "angle": 0
   },
 
   "detectors": {
@@ -23,16 +23,16 @@
       "rect": [0, 308, 25, 300],
       "action": "switch_zone",
       "map_name": "level_7",
-      "player_new_position": [1570, 680],
-      "player_new_angle": 90
+      "player_new_position": [1575, 680],
+      "player_new_angle": 180
     }
   },
 
   "entities": {
     "bloby": {
       "type": "blob",
-      "position":900,
-      "speed": 6,
+      "position":850,
+      "speed": 6.5,
       "direction": [0, -1]
     }
   }

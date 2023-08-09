@@ -8,7 +8,7 @@
 
   "dynamics": {
     "thrust_exploration": 35000,
-    "thrust_chase": 50000,
+    "thrust_chase": 45000,
     "torque": 250,
     "boost_multiplier": 2
   },

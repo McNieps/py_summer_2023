@@ -47,8 +47,8 @@
       "action": "add_entity",
       "entity_dict": {
         "type": "blob",
-        "position": 1000,
-        "speed": 60,
+        "position": 900,
+        "speed": 165,
         "direction": [-1, 0]
       }
     },
@@ -60,7 +60,7 @@
         "rect": [0, 0, 25, 400],
         "action": "switch_zone",
         "map_name": "level_5",
-        "player_new_position": [1570, 645],
+        "player_new_position": [1575, 645],
         "player_new_angle": 180
       }
     },

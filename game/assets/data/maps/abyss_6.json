@@ -14,8 +14,8 @@
   },
 
   "initial_condition": {
-    "position": [840, 1570],
-    "angle": 90
+    "position": [840, 1575],
+    "angle": -90
   },
 
   "detectors": {
@@ -23,8 +23,8 @@
       "rect": [592, 0, 500, 25],
       "action": "switch_zone",
       "map_name": "abyss_7",
-      "player_new_position": [800, 1570],
-      "player_new_angle": 90
+      "player_new_position": [800, 1575],
+      "player_new_angle": -90
     }
   },
 
@@ -32,7 +32,7 @@
     "blob": {
       "type": "blob",
       "position": 2000,
-      "speed": 152,
+      "speed": 160,
       "direction": [0, -1]
     }
   }

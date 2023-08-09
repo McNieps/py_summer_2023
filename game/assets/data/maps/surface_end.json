@@ -1,13 +1,13 @@
 {
   "music": {
     "track": "menu",
-    "volume": 0.25
+    "volume": 0.50
   },
 
   "graphics": {
     "color_id": 1,
 
-    "filter_enabled": true,
+    "filter_enabled": false,
     "filter_brightness": 192,
 
     "spotlight_enabled": false

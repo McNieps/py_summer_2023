@@ -14,8 +14,8 @@
   },
 
   "initial_condition": {
-    "position": [1570, 590],
-    "angle": 90
+    "position": [1575, 590],
+    "angle": 180
   },
 
   "detectors": {
@@ -23,8 +23,8 @@
       "rect": [0, 144, 25, 240],
       "action": "switch_zone",
       "map_name": "level_9",
-      "player_new_position": [1570, 192],
-      "player_new_angle": 90
+      "player_new_position": [1575, 192],
+      "player_new_angle": 180
     }
   },
 

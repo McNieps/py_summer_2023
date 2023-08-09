@@ -55,7 +55,7 @@ class EntityScene(Scene):
                delta: float) -> None:
 
         for entity in self.entities:
-            entity.update(delta)
+            entity.update(self.avg_delta)
 
         for entity in reversed(self.entities):
             if entity.to_delete:

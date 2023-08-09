@@ -58,6 +58,7 @@ class World(BaseInstance):
 
     async def loop(self) -> None:
         self.window.fill(self.color)
+        LoopHandler.fps_caption()
 
         if self.transition is None:
             for scene in self.scenes:
